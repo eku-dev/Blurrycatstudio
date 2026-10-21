@@ -1,9 +1,10 @@
 import { AnimatePresence, motion, useMotionValueEvent, useScroll } from 'framer-motion'
-import { ArrowDown } from 'lucide-react'
+import { ArrowUpRight } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
 import { ARC_CARDS } from '../lib/data'
 import { img } from '../lib/images'
 import { reducedMotion } from '../lib/smooth'
+import { useUI } from '../lib/ui'
 import type { ArcHandle } from '../three/arcScene'
 import { Button, MaskLines, Reveal } from './primitives'
 
@@ -24,6 +25,7 @@ function RingText() {
 }
 
 export default function WorkArc() {
+  const { openContact } = useUI()
   const section = useRef<HTMLElement>(null)
   const host = useRef<HTMLDivElement>(null)
   const scene = useRef<ArcHandle | null>(null)
@@ -108,7 +110,7 @@ export default function WorkArc() {
           <RingText />
         </div>
         <p className="label mb-5 text-fog">
-          <span className="text-coral">(01)</span> Selected work
+          <span className="text-coral">(03)</span> Selected work
         </p>
         <h2 className="font-display text-[clamp(2.5rem,6.4vw,6.4rem)] font-semibold leading-[0.92] tracking-[-0.055em]">
           <MaskLines lines={['Good work,', <>built with <span className="serif">intent.</span></>]} />
@@ -118,8 +120,8 @@ export default function WorkArc() {
             A selection of projects where design, technology and creativity come together to create real impact.
           </p>
           <div className="mt-8 flex justify-center">
-            <Button href="#services" variant="ivory" icon={<ArrowDown size={16} />}>
-              What we do
+            <Button onClick={openContact} variant="ivory" icon={<ArrowUpRight size={16} />}>
+              Start a project
             </Button>
           </div>
         </Reveal>

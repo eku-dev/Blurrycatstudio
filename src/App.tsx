@@ -44,9 +44,9 @@ export default function App() {
         <Nav />
         <main id="main">
           <Hero />
-          <WorkArc />
-          <Process />
           <Services />
+          <Process />
+          <WorkArc />
           {/* Hidden for now — re-enable when real case studies and studio copy are ready.
           <Projects />
           <Philosophy />

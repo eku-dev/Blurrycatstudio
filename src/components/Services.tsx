@@ -86,7 +86,7 @@ export default function Services() {
       <div className="shell flex flex-1 flex-col lg:min-h-0">
         <div className="grid gap-5 lg:grid-cols-12 lg:items-end">
           <div className="lg:col-span-8">
-            <SectionLabel index="03">What we do</SectionLabel>
+            <SectionLabel index="01">What we do</SectionLabel>
             <h2 className="mt-4 font-display text-[clamp(2.1rem,min(4vw,6.4svh),4rem)] font-semibold leading-[0.95] tracking-[-0.05em]">
               <MaskLines lines={[<>Three disciplines, one <span className="serif">point of view.</span></>]} />
             </h2>
