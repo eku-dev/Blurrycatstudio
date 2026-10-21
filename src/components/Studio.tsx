@@ -113,7 +113,7 @@ export function Process() {
     <section id="process" data-snap-steps={STEPS.length} ref={ref} className="relative bg-charcoal text-ivory" style={{ height: `${STEPS.length * 70 + 60}vh` }}>
       <div className="shell sticky top-0 grid h-[100svh] grid-rows-[auto_1fr] overflow-hidden lg:grid-cols-12 lg:grid-rows-1 lg:items-center">
         <div className="pt-24 lg:col-span-4 lg:pt-0">
-            <SectionLabel index="02" tone="ivory">
+            <SectionLabel index="03" tone="ivory">
               How we work
             </SectionLabel>
             <h2 className="mt-6 font-display text-[clamp(2rem,4.2vw,4rem)] font-semibold leading-[0.95] tracking-[-0.05em]">
