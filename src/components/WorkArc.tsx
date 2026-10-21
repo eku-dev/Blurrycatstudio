@@ -108,7 +108,7 @@ export default function WorkArc() {
           <RingText />
         </div>
         <p className="label mb-5 text-fog">
-          <span className="text-coral">(02)</span> Selected work
+          <span className="text-coral">(01)</span> Selected work
         </p>
         <h2 className="font-display text-[clamp(2.5rem,6.4vw,6.4rem)] font-semibold leading-[0.92] tracking-[-0.055em]">
           <MaskLines lines={['Good work,', <>built with <span className="serif">intent.</span></>]} />

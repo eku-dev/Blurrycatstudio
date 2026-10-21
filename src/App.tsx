@@ -44,8 +44,8 @@ export default function App() {
         <Nav />
         <main id="main">
           <Hero />
-          <Process />
           <WorkArc />
+          <Process />
           <Services />
           {/* Hidden for now — re-enable when real case studies and studio copy are ready.
           <Projects />
