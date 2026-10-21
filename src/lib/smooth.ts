@@ -17,8 +17,15 @@ function buildSnaps() {
   snap?.destroy()
   snap = null
   if (!lenis || !snapMQ().matches) return
-  // 'lock' moves exactly one snap per gesture; the threshold must cover the largest gap between snaps.
-  snap = new Snap(lenis, { type: 'lock', distanceThreshold: '250%', duration: 1.15, debounce: 120 })
+  // Gentle settling: scrolling stays free, and only once the user pauses near a section
+  // edge does the page glide the rest of the way. Never forces a jump mid-gesture.
+  snap = new Snap(lenis, {
+    type: 'proximity',
+    distanceThreshold: '22%',
+    debounce: 420,
+    duration: 1.1,
+    easing: (t) => 1 - Math.pow(1 - t, 4),
+  })
 
   document.querySelectorAll<HTMLElement>('[data-snap]').forEach((el) => snap!.add(Math.round(docTop(el))))
 
@@ -36,7 +43,7 @@ function buildSnaps() {
 
 export function startSmoothScroll() {
   if (reducedMotion()) return () => {}
-  lenis = new Lenis({ lerp: 0.09, wheelMultiplier: 1 })
+  lenis = new Lenis({ lerp: 0.075, wheelMultiplier: 0.9, touchMultiplier: 1 })
   let raf = 0
   const loop = (t: number) => {
     lenis?.raf(t)

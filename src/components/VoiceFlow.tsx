@@ -58,39 +58,96 @@ function Mark({ b, x, y, size = 24, color = 'currentColor' }: { b: Brand; x: num
 
 /* ─────────── n8n-style workflow graph ─────────── */
 
-type Node = { id: string; x: number; y: number; w?: number; b: Brand; label: string; sub?: string; trigger?: boolean; accent?: boolean }
+type NodeDef = { id: string; w?: number; b: Brand; label: string; sub?: string; trigger?: boolean; accent?: boolean }
+type Pt = readonly [number, number]
 
-const NODES: Node[] = [
-  { id: 'call', x: 18, y: 92, b: B.vapi, label: 'Incoming call', sub: 'Vapi', trigger: true },
-  { id: 'hook', x: 132, y: 92, b: B.n8n, label: 'Webhook', sub: 'n8n' },
-  { id: 'agent', x: 246, y: 84, w: 132, b: B.openai, label: 'AI Agent', sub: 'Tools agent', accent: true },
-  { id: 'if', x: 430, y: 92, b: B.n8n, label: 'Qualified?', sub: 'If' },
-  { id: 'crm', x: 548, y: 30, b: B.hubspot, label: 'Create deal', sub: 'HubSpot' },
-  { id: 'cal', x: 548, y: 154, b: B.gcal, label: 'Book meeting', sub: 'Calendar' },
+const NODES: NodeDef[] = [
+  { id: 'call', b: B.vapi, label: 'Incoming call', sub: 'Vapi', trigger: true },
+  { id: 'hook', b: B.n8n, label: 'Webhook', sub: 'n8n' },
+  { id: 'agent', w: 132, b: B.openai, label: 'AI Agent', sub: 'Tools agent', accent: true },
+  { id: 'if', b: B.n8n, label: 'Qualified?', sub: 'If' },
+  { id: 'crm', b: B.hubspot, label: 'Create deal', sub: 'HubSpot' },
+  { id: 'cal', b: B.gcal, label: 'Book meeting', sub: 'Calendar' },
 ]
-// sub-nodes hanging under the agent (n8n draws these as round, dashed connections)
-const SUBS: { id: string; x: number; b: Brand; label: string }[] = [
-  { id: 'model', x: 236, b: B.claude, label: 'Model' },
-  { id: 'voice', x: 296, b: B.eleven, label: 'Voice' },
-  { id: 'stt', x: 356, b: B.deepgram, label: 'Transcribe' },
+// sub-nodes attached to the agent (n8n draws these as round, dashed connections)
+const SUBS: { id: string; b: Brand; label: string }[] = [
+  { id: 'model', b: B.claude, label: 'Model' },
+  { id: 'voice', b: B.eleven, label: 'Voice' },
+  { id: 'stt', b: B.deepgram, label: 'Transcribe' },
 ]
-
-const S = 56 // node size
-const nodeW = (n: Node) => n.w ?? S
-const outP = (n: Node) => [n.x + nodeW(n), n.y + S / 2] as const
-const inP = (n: Node) => [n.x, n.y + S / 2] as const
-const byId = (id: string) => NODES.find((n) => n.id === id)!
-const curve = ([x1, y1]: readonly [number, number], [x2, y2]: readonly [number, number]) => {
-  const dx = Math.max(30, (x2 - x1) * 0.5)
-  return `M${x1},${y1} C${x1 + dx},${y1} ${x2 - dx},${y2} ${x2},${y2}`
-}
-const EDGES = [
+const LINKS = [
   ['call', 'hook'],
   ['hook', 'agent'],
   ['agent', 'if'],
   ['if', 'crm'],
   ['if', 'cal'],
-].map(([a, b]) => ({ id: `${a}-${b}`, d: curve(outP(byId(a)), inP(byId(b))) }))
+] as const
+
+/**
+ * Two arrangements of the same workflow: left-to-right for wide cards,
+ * top-to-bottom for phones so every node stays legible without scrolling.
+ */
+type Variant = 'wide' | 'tall'
+const LAYOUTS: Record<
+  Variant,
+  { vb: Pt; flow: 'h' | 'v'; nodes: Record<string, Pt>; subs: Record<string, Pt>; yes: Pt; no: Pt }
+> = {
+  wide: {
+    vb: [622, 262],
+    flow: 'h',
+    nodes: { call: [18, 92], hook: [132, 92], agent: [246, 84], if: [430, 92], crm: [548, 30], cal: [548, 154] },
+    subs: { model: [256, 228], voice: [316, 228], stt: [376, 228] },
+    yes: [500, 76],
+    no: [500, 196],
+  },
+  tall: {
+    vb: [340, 556],
+    flow: 'v',
+    nodes: { call: [74, 8], hook: [74, 116], agent: [36, 232], if: [74, 336], crm: [14, 462], cal: [134, 462] },
+    subs: { model: [290, 196], voice: [290, 260], stt: [290, 324] },
+    yes: [30, 446],
+    no: [196, 446],
+  },
+}
+
+const S = 56 // node size
+const nodeW = (n: NodeDef) => n.w ?? S
+
+function geometry(variant: Variant) {
+  const L = LAYOUTS[variant]
+  const pos = (id: string) => L.nodes[id]
+  const def = (id: string) => NODES.find((n) => n.id === id)!
+  const inP = (id: string): Pt => {
+    const [x, y] = pos(id)
+    return L.flow === 'h' ? [x, y + S / 2] : [x + nodeW(def(id)) / 2, y]
+  }
+  const outP = (id: string): Pt => {
+    const [x, y] = pos(id)
+    return L.flow === 'h' ? [x + nodeW(def(id)), y + S / 2] : [x + nodeW(def(id)) / 2, y + S]
+  }
+  const curve = ([x1, y1]: Pt, [x2, y2]: Pt) => {
+    if (L.flow === 'h') {
+      const d = Math.max(30, (x2 - x1) * 0.5)
+      return `M${x1},${y1} C${x1 + d},${y1} ${x2 - d},${y2} ${x2},${y2}`
+    }
+    const d = Math.max(24, (y2 - y1) * 0.5)
+    return `M${x1},${y1} C${x1},${y1 + d} ${x2},${y2 - d} ${x2},${y2}`
+  }
+  const edges = LINKS.map(([a, b]) => ({ id: `${a}-${b}`, d: curve(outP(a), inP(b)) }))
+  // dashed links from each sub-node to the agent
+  const [ax, ay] = pos('agent')
+  const aw = nodeW(def('agent'))
+  const subLinks = SUBS.map((s) => {
+    const [cx, cy] = L.subs[s.id]
+    const d =
+      L.flow === 'h'
+        ? `M${cx},${cy - 18} C${cx},${cy - 48} ${ax + aw / 2},${ay + S + 30} ${ax + aw / 2},${ay + S}`
+        : `M${cx - 18},${cy} C${cx - 48},${cy} ${ax + aw + 30},${ay + S / 2} ${ax + aw},${ay + S / 2}`
+    return { id: s.id, d }
+  })
+  return { L, pos, inP, outP, edges, subLinks }
+}
+const GEO = { wide: geometry('wide'), tall: geometry('tall') }
 
 /* Execution timeline — each element appears at a step, like watching an n8n run. */
 const AT: Record<string, number> = { call: 1, hook: 3, agent: 5, if: 11, crm: 13, cal: 15 }
@@ -162,28 +219,29 @@ export function FlowStatus({ step }: { step: number }) {
   )
 }
 
-export function VoiceFlow({ step, loop, className = '' }: { step: number; loop: number; className?: string }) {
-  const agent = byId('agent')
-  const subY = 210
+export function VoiceFlow({ step, loop, variant = 'wide', className = '' }: { step: number; loop: number; variant?: Variant; className?: string }) {
+  const { L, pos, inP, outP, edges, subLinks } = GEO[variant]
+  const [vw, vh] = L.vb
   const active = activeNode(step)
   const thinking = step === THINK
+  const patternId = `dots-${variant}`
 
   return (
     <svg
-      viewBox="0 0 622 262"
+      viewBox={`0 0 ${vw} ${vh}`}
       className={className}
       role="img"
       aria-label="Voice agent workflow: an incoming Vapi call triggers an n8n webhook, an AI agent using Claude, ElevenLabs and Deepgram handles the conversation, then qualified leads go to HubSpot and meetings to Google Calendar."
     >
       <defs>
-        <pattern id="dots" width="16" height="16" patternUnits="userSpaceOnUse">
+        <pattern id={patternId} width="16" height="16" patternUnits="userSpaceOnUse">
           <circle cx="1" cy="1" r="0.9" fill="#F5F3EE" opacity="0.09" />
         </pattern>
       </defs>
-      <rect width="622" height="262" fill="url(#dots)" />
+      <rect width={vw} height={vh} fill={`url(#${patternId})`} />
 
       {/* connections draw in as the execution reaches them */}
-      {EDGES.map((e) => {
+      {edges.map((e) => {
         const on = step >= EDGE_AT[e.id]
         return (
           <g key={e.id}>
@@ -205,14 +263,14 @@ export function VoiceFlow({ step, loop, className = '' }: { step: number; loop: 
           </g>
         )
       })}
-      <motion.text initial={false} animate={{ opacity: step >= AT.crm ? 1 : 0 }} x="500" y="76" fontSize="8.5" fontFamily="Inter" fill="#A9A69E" letterSpacing="1">TRUE</motion.text>
-      <motion.text initial={false} animate={{ opacity: step >= AT.cal ? 1 : 0 }} x="500" y="196" fontSize="8.5" fontFamily="Inter" fill="#A9A69E" letterSpacing="1">FALSE</motion.text>
+      <motion.text initial={false} animate={{ opacity: step >= AT.crm ? 1 : 0 }} x={L.yes[0]} y={L.yes[1]} fontSize="8.5" fontFamily="Inter" fill="#A9A69E" letterSpacing="1">TRUE</motion.text>
+      <motion.text initial={false} animate={{ opacity: step >= AT.cal ? 1 : 0 }} x={L.no[0]} y={L.no[1]} fontSize="8.5" fontFamily="Inter" fill="#A9A69E" letterSpacing="1">FALSE</motion.text>
 
       {/* sub-node connections — dashes flow while the agent is talking */}
-      {SUBS.map((s) => (
+      {subLinks.map((s) => (
         <motion.path
           key={s.id}
-          d={`M${s.x + 20},${subY} C${s.x + 20},${subY - 30} ${agent.x + agent.w! / 2},${agent.y + S + 30} ${agent.x + agent.w! / 2},${agent.y + S}`}
+          d={s.d}
           fill="none"
           stroke={thinking ? '#E5533D' : '#F5F3EE'}
           strokeDasharray="3 4"
@@ -224,24 +282,21 @@ export function VoiceFlow({ step, loop, className = '' }: { step: number; loop: 
 
       {/* nodes */}
       {NODES.map((n) => {
+        const [x, y] = pos(n.id)
         const w = nodeW(n)
         const shown = step >= AT[n.id]
         const isActive = active === n.id
         const done = shown && (step >= DONE || (active !== null && AT[n.id] < AT[active]))
         const stroke = isActive ? '#E5533D' : done ? '#9CA697' : '#F5F3EE'
         const strokeOpacity = isActive || done ? 1 : 0.18
+        const [ix, iy] = inP(n.id)
+        const [ox, oy] = outP(n.id)
         return (
-          <motion.g
-            key={n.id}
-            initial={false}
-            animate={{ opacity: shown ? 1 : 0, scale: shown ? 1 : 0.6 }}
-            transition={{ type: 'spring', stiffness: 260, damping: 20 }}
-            style={pop}
-          >
+          <motion.g key={n.id} initial={false} animate={{ opacity: shown ? 1 : 0, scale: shown ? 1 : 0.6 }} transition={{ type: 'spring', stiffness: 260, damping: 20 }} style={pop}>
             {isActive && (
               <motion.rect
-                x={n.x - 5}
-                y={n.y - 5}
+                x={x - 5}
+                y={y - 5}
                 width={w + 10}
                 height={S + 10}
                 rx={13}
@@ -252,17 +307,11 @@ export function VoiceFlow({ step, loop, className = '' }: { step: number; loop: 
               />
             )}
             {n.trigger ? (
-              <path
-                d={`M${n.x},${n.y} h${S} v${S} h-${S} a${S / 2},${S / 2} 0 0 1 0,-${S}`}
-                fill="#2B2C28"
-                stroke={stroke}
-                strokeOpacity={strokeOpacity}
-                strokeWidth={isActive || done ? 1.5 : 1}
-              />
+              <path d={`M${x},${y} h${S} v${S} h-${S} a${S / 2},${S / 2} 0 0 1 0,-${S}`} fill="#2B2C28" stroke={stroke} strokeOpacity={strokeOpacity} strokeWidth={isActive || done ? 1.5 : 1} />
             ) : (
               <rect
-                x={n.x}
-                y={n.y}
+                x={x}
+                y={y}
                 width={w}
                 height={S}
                 rx={9}
@@ -274,8 +323,8 @@ export function VoiceFlow({ step, loop, className = '' }: { step: number; loop: 
             )}
             {n.accent ? (
               <>
-                <Mark b={n.b} x={n.x + 14} y={n.y + 16} color="#171816" />
-                <text x={n.x + 48} y={n.y + 26} fontSize="12" fontWeight="700" fontFamily="Manrope" fill="#171816">
+                <Mark b={n.b} x={x + 14} y={y + 16} color="#171816" />
+                <text x={x + 48} y={y + 26} fontSize="12" fontWeight="700" fontFamily="Manrope" fill="#171816">
                   AI Agent
                 </text>
                 {thinking ? (
@@ -283,50 +332,68 @@ export function VoiceFlow({ step, loop, className = '' }: { step: number; loop: 
                     {[0, 1, 2, 3, 4, 5, 6].map((k) => (
                       <motion.rect
                         key={k}
-                        x={n.x + 48 + k * 6}
+                        x={x + 48 + k * 6}
                         width="3"
                         rx="1.5"
                         fill="#171816"
-                        initial={{ height: 3, y: n.y + 36 }}
-                        animate={{ height: [3, 10 + (k % 3) * 3, 3], y: [n.y + 37, n.y + 31 - (k % 3) * 1.5, n.y + 37] }}
+                        initial={{ height: 3, y: y + 36 }}
+                        animate={{ height: [3, 10 + (k % 3) * 3, 3], y: [y + 37, y + 31 - (k % 3) * 1.5, y + 37] }}
                         transition={{ duration: 0.7, repeat: Infinity, delay: k * 0.08 }}
                       />
                     ))}
                   </g>
                 ) : (
-                  <text x={n.x + 48} y={n.y + 40} fontSize="9" fontFamily="Inter" fill="#171816" opacity="0.7">
+                  <text x={x + 48} y={y + 40} fontSize="9" fontFamily="Inter" fill="#171816" opacity="0.7">
                     {step >= DONE ? 'Call handled' : 'Tools agent'}
                   </text>
                 )}
               </>
             ) : (
-              <Mark b={n.b} x={n.x + (w - 24) / 2} y={n.y + 16} color="#F5F3EE" />
+              <Mark b={n.b} x={x + (w - 24) / 2} y={y + 16} color="#F5F3EE" />
             )}
-            {n.id !== 'call' && <rect x={n.x - 3} y={n.y + S / 2 - 5} width="6" height="10" rx="1" fill="#A9A69E" />}
-            {!['crm', 'cal'].includes(n.id) && <circle cx={n.x + w} cy={n.y + S / 2} r="4" fill="#A9A69E" />}
-            {!n.accent && (
-              <>
-                <text x={n.x + w / 2} y={n.y + S + 15} textAnchor="middle" fontSize="10" fontWeight="600" fontFamily="Manrope" fill="#F5F3EE">
-                  {n.label}
-                </text>
-                <text x={n.x + w / 2} y={n.y + S + 27} textAnchor="middle" fontSize="8.5" fontFamily="Inter" fill="#A9A69E">
-                  {n.sub}
-                </text>
-              </>
-            )}
-            {done && <Check x={n.x + w - 2} y={n.y + 2} />}
+            {/* ports: square input, round output */}
+            {n.id !== 'call' &&
+              (L.flow === 'h' ? (
+                <rect x={ix - 3} y={iy - 5} width="6" height="10" rx="1" fill="#A9A69E" />
+              ) : (
+                <rect x={ix - 5} y={iy - 3} width="10" height="6" rx="1" fill="#A9A69E" />
+              ))}
+            {!['crm', 'cal'].includes(n.id) && <circle cx={ox} cy={oy} r="4" fill="#A9A69E" />}
+            {!n.accent &&
+              (L.flow === 'v' && n.id !== 'crm' && n.id !== 'cal' ? (
+                // portrait: labels sit beside the node so the vertical flow stays clear
+                <>
+                  <text x={x + w + 12} y={y + S / 2 - 2} fontSize="11" fontWeight="600" fontFamily="Manrope" fill="#F5F3EE">
+                    {n.label}
+                  </text>
+                  <text x={x + w + 12} y={y + S / 2 + 12} fontSize="9.5" fontFamily="Inter" fill="#A9A69E">
+                    {n.sub}
+                  </text>
+                </>
+              ) : (
+                <>
+                  <text x={x + w / 2} y={y + S + 15} textAnchor="middle" fontSize={L.flow === 'v' ? 11 : 10} fontWeight="600" fontFamily="Manrope" fill="#F5F3EE">
+                    {n.label}
+                  </text>
+                  <text x={x + w / 2} y={y + S + 28} textAnchor="middle" fontSize={L.flow === 'v' ? 9.5 : 8.5} fontFamily="Inter" fill="#A9A69E">
+                    {n.sub}
+                  </text>
+                </>
+              ))}
+            {done && <Check x={x + w - 2} y={y + 2} />}
           </motion.g>
         )
       })}
 
-      {/* sub-nodes drop in under the agent */}
+      {/* sub-nodes drop in beside / under the agent */}
       {SUBS.map((s) => {
+        const [cx, cy] = L.subs[s.id]
         const shown = step >= SUB_AT[s.id]
         return (
           <motion.g key={s.id} initial={false} animate={{ opacity: shown ? 1 : 0, y: shown ? 0 : -14 }} transition={{ type: 'spring', stiffness: 300, damping: 22 }}>
-            <circle cx={s.x + 20} cy={subY + 18} r="18" fill="#2B2C28" stroke={thinking ? '#E5533D' : '#F5F3EE'} strokeOpacity={thinking ? 0.9 : 0.18} />
-            <Mark b={s.b} x={s.x + 11} y={subY + 9} size={18} color="#F5F3EE" />
-            <text x={s.x + 20} y={subY + 50} textAnchor="middle" fontSize="8.5" fontFamily="Inter" fill="#A9A69E">
+            <circle cx={cx} cy={cy} r="18" fill="#2B2C28" stroke={thinking ? '#E5533D' : '#F5F3EE'} strokeOpacity={thinking ? 0.9 : 0.18} />
+            <Mark b={s.b} x={cx - 9} y={cy - 9} size={18} color="#F5F3EE" />
+            <text x={cx} y={cy + 32} textAnchor="middle" fontSize={L.flow === 'v' ? 9.5 : 8.5} fontFamily="Inter" fill="#A9A69E">
               {s.label}
             </text>
           </motion.g>

@@ -46,7 +46,7 @@ const REEL = [
   { id: IMG.swatches, t: 'Identity study', s: 'Digital design' },
   { id: IMG.micDark, t: 'Front Desk', s: 'Voice agent concept' },
   { id: IMG.architecture, t: 'Spatial study', s: 'Architectural visual' },
-  { id: IMG.shoeRed, t: 'Product render', s: '3D & CGI' },
+  { id: IMG.render, t: 'Product render', s: '3D & CGI' },
 ]
 const DUR = 3600
 

@@ -41,7 +41,7 @@ export default function Nav() {
         animate={{ y: hidden ? -90 : 0 }}
         transition={{ duration: 0.7, ease: EASE }}
         className={`fixed inset-x-0 top-0 ${open ? 'z-[60]' : 'z-50'} transition-[background-color,border-color] duration-500 ${
-          solid && !open ? 'border-b border-ink/10 bg-ivory/95' : 'border-b border-transparent'
+          solid && !open ? 'border-b border-ink/10 bg-ivory' : 'border-b border-transparent'
         }`}
       >
         <nav className="shell flex h-[72px] items-center justify-between" aria-label="Primary">

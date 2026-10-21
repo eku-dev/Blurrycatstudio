@@ -15,7 +15,7 @@ export function FinalCTA() {
   const clip = useTransform(scrollYProgress, [0.05, 0.45], ['inset(18% 22% 18% 22%)', 'inset(0% 0% 0% 0%)'])
 
   return (
-    <section ref={ref} data-snap className="flex flex-col justify-center bg-ivory py-24 lg:h-[100svh] lg:min-h-[620px] lg:py-0 lg:pt-[72px]">
+    <section ref={ref} data-snap className="flex flex-col justify-center bg-ivory py-20 sm:py-24 lg:h-[100svh] lg:min-h-[620px] lg:py-0 lg:pt-[72px]">
       <div className="shell grid gap-12 lg:grid-cols-12 lg:items-center">
         <div className="lg:col-span-6">
           <p className="label text-mute">

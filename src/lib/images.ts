@@ -27,4 +27,9 @@ export const IMG = {
   house: '1600585154340-be6161a56a0c',
   towers: '1511818966892-d7d671e672a2',
   headphones: '1583394838336-acd977736f90',
+  render: '1652953373910-4a166631a3a6',
+  circuit: '1535136104956-115a2cd67fc4',
+  shapes: '1604782206219-3b9576575203',
+  sphere: '1653299181802-5d1282fa5eac',
+  marble: '1667400104789-f50a4cb393cf',
 } as const

@@ -110,10 +110,10 @@ export default function Services() {
                   <FlowStatus step={step} />
                   <span className="label shrink-0 text-[10px] text-fog">n8n · workflow</span>
                 </div>
-                <div className="overflow-x-auto [scrollbar-width:none] lg:min-h-0 lg:flex-1 lg:overflow-visible">
-                  <div className="min-w-[540px] lg:h-full lg:min-w-0">
-                    <VoiceFlow step={step} loop={loop} className="h-auto w-full lg:h-full" />
-                  </div>
+                {/* vertical layout on phones so the whole workflow is visible, wide from sm up */}
+                <VoiceFlow step={step} loop={loop} variant="tall" className="mx-auto h-auto w-full max-w-[380px] sm:hidden" />
+                <div className="hidden sm:block lg:min-h-0 lg:flex-1">
+                  <VoiceFlow step={step} loop={loop} className="h-auto w-full lg:h-full" />
                 </div>
               </div>
               <div className="grid gap-3 p-6 lg:grid-cols-[1fr_auto] lg:items-end lg:px-8 lg:py-5">
@@ -139,14 +139,14 @@ export default function Services() {
                 </p>
                 <Tags items={['Product', 'Motion', 'Spatial']} className={short} />
               </div>
-              <Photo id={IMG.shoeRed} alt="Red running shoe floating against a red backdrop" className="mx-4 mb-4 aspect-[4/3] sm:m-4 sm:ml-0 sm:aspect-auto lg:m-5 lg:ml-0" />
+              <Photo id={IMG.render} alt="A coral sphere resting on a white pedestal, rendered in soft studio light" className="aspect-[4/3] sm:aspect-auto" />
             </a>
           </Reveal>
 
           {/* 03 — AI Systems */}
           <Reveal className="min-w-0 lg:col-span-5 lg:min-h-0" delay={0.16}>
             <a href="#contact" onClick={go} className={`${card} bg-paper sm:grid sm:grid-cols-[1fr_1.2fr]`}>
-              <Photo id={IMG.drafting} alt="Hands sketching a system plan at a drafting table" className="aspect-[4/3] sm:order-none sm:aspect-auto" />
+              <Photo id={IMG.circuit} alt="Black and white macro of a circuit board" className="aspect-[4/3] sm:aspect-auto" />
               <div className="flex flex-col p-6 lg:p-8">
                 <CardHead n="03" title="AI Systems" />
                 <p className="mt-6 max-w-[30ch] pt-4 text-[14px] leading-relaxed text-ink/75 sm:mt-auto lg:text-[15px]">
