@@ -221,6 +221,8 @@ export function mountMotionPhoto(host: HTMLElement, opts: MotionPhotoOptions) {
   if (!opts.reduced) raf = requestAnimationFrame(loop)
 
   return {
+    /** Re-run `layout` — call when surrounding content changes size (e.g. web fonts load). */
+    refresh: resize,
     dispose() {
       cancelAnimationFrame(raf)
       ro.disconnect()

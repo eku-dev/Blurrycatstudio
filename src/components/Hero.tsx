@@ -9,32 +9,55 @@ import { Button, EASE, Magnetic, MaskLines } from './primitives'
 
 const PHOTO = '/images/billi.webp'
 
-/** Where the 1:1 studio photograph sits inside the hero canvas. */
-function layout(w: number, h: number) {
-  if (w / h >= 1) {
-    // desktop: full height, anchored right; the backdrop streaks out to the left
-    const s = h * 1.04
-    return { x: w - s * 0.97, y: -s * 0.02, w: s, h: s }
+// The cat occupies roughly this vertical band of the square photo (ear tips → plinth base).
+const CAT_TOP = 0.17
+const CAT_BOTTOM = 0.9
+const CAT_CENTER_X = 0.47
+
+/** Offset of `el` from `ancestor`, ignoring transforms (parallax / reveal animations). */
+function offsetWithin(el: HTMLElement, ancestor: HTMLElement) {
+  let top = 0
+  let node: HTMLElement | null = el
+  while (node && node !== ancestor) {
+    top += node.offsetTop
+    node = node.offsetParent as HTMLElement | null
   }
-  // portrait: centred under the headline, above the copy
-  const s = Math.min(w * 1.15, h * 0.5)
-  return { x: w * 0.5 - s * 0.42, y: h * 0.27, w: s, h: s }
+  return top
 }
 
 export default function Hero() {
   const { openContact, openReel } = useUI()
   const section = useRef<HTMLElement>(null)
   const stage = useRef<HTMLDivElement>(null)
+  const headline = useRef<HTMLHeadingElement>(null)
+  const copy = useRef<HTMLDivElement>(null)
   const [ready, setReady] = useState(false)
   const { scrollYProgress } = useScroll({ target: section, offset: ['start start', 'end start'] })
   const textY = useTransform(scrollYProgress, [0, 1], ['0%', '-18%'])
   const fade = useTransform(scrollYProgress, [0, 0.7], [1, 0])
 
   useEffect(() => {
-    if (!stage.current) return
-    let handle: { dispose: () => void } | null = null
+    const host = stage.current
+    if (!host) return
+
+    /** Where the 1:1 studio photograph sits inside the hero canvas. */
+    const layout = (w: number, h: number) => {
+      if (w / h >= 1) {
+        // desktop: full height, anchored right; the backdrop streaks out to the left
+        const s = h * 1.04
+        return { x: w - s * 0.97, y: -s * 0.02, w: s, h: s }
+      }
+      // portrait: fit the cat into the measured gap between the headline and the copy
+      const frame = host.parentElement!
+      const top = headline.current ? offsetWithin(headline.current, frame) + headline.current.offsetHeight + 16 : h * 0.3
+      const bottom = copy.current ? offsetWithin(copy.current, frame) - 12 : h * 0.75
+      const s = Math.min(w * 1.15, Math.max(160, bottom - top) / (CAT_BOTTOM - CAT_TOP))
+      return { x: w * 0.5 - s * CAT_CENTER_X, y: top - s * CAT_TOP, w: s, h: s }
+    }
+
+    let handle: { dispose: () => void; refresh: () => void } | null = null
     try {
-      handle = mountMotionPhoto(stage.current, {
+      handle = mountMotionPhoto(host, {
         src: PHOTO,
         focus: [0.4, 0.27],
         layout,
@@ -44,7 +67,15 @@ export default function Hero() {
     } catch {
       // WebGL unavailable — the studio gradient below still carries the composition.
     }
-    return () => handle?.dispose()
+    // Text height changes once web fonts arrive or the copy reflows — re-fit the photo.
+    const ro = new ResizeObserver(() => handle?.refresh())
+    if (headline.current) ro.observe(headline.current)
+    if (copy.current) ro.observe(copy.current)
+    document.fonts?.ready.then(() => handle?.refresh())
+    return () => {
+      ro.disconnect()
+      handle?.dispose()
+    }
   }, [])
 
   return (
@@ -52,7 +83,7 @@ export default function Hero() {
       id="top"
       ref={section}
       data-snap
-      className="relative isolate flex min-h-[max(100svh,720px)] flex-col overflow-hidden bg-[#4b4b4b] lg:h-[100svh] lg:min-h-[620px]"
+      className="relative isolate flex min-h-[max(112svh,780px)] flex-col sm:min-h-[max(100svh,720px)] overflow-hidden bg-[#4b4b4b] lg:h-[100svh] lg:min-h-[620px]"
     >
       <div className="relative flex flex-1 flex-col pt-[72px]">
         {/* First paint / fallback: the photograph's own studio gradient */}
@@ -68,7 +99,7 @@ export default function Hero() {
         />
 
         <motion.div style={{ y: textY, opacity: fade }} className="shell pointer-events-none relative z-10 flex flex-1 flex-col">
-          <h1 className="mt-14 font-display text-[clamp(2.9rem,min(8.6vw,13.5svh),9.4rem)] font-semibold leading-[0.9] tracking-[-0.055em] text-ivory lg:mt-[9svh]">
+          <h1 ref={headline} className="mt-14 font-display text-[clamp(2.9rem,min(8.6vw,13.5svh),9.4rem)] font-semibold leading-[0.9] tracking-[-0.055em] text-ivory lg:mt-[9svh]">
             <MaskLines
               inView={false}
               delay={0.25}
@@ -83,6 +114,7 @@ export default function Hero() {
           </h1>
 
           <motion.div
+            ref={copy}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1.1, ease: EASE, delay: 0.85 }}
