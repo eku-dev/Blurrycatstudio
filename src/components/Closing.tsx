@@ -57,11 +57,13 @@ export function FinalCTA() {
   )
 }
 
+const INSTAGRAM = 'https://www.instagram.com/blurrycatstudio/'
+
 const SOCIAL = [
   { label: 'Behance', href: 'https://www.behance.net/' },
   { label: 'Dribbble', href: 'https://dribbble.com/' },
   { label: 'LinkedIn', href: 'https://www.linkedin.com/' },
-  { label: 'Instagram', href: 'https://www.instagram.com/' },
+  { label: 'Instagram', href: INSTAGRAM },
 ]
 
 export function Footer() {
@@ -80,6 +82,9 @@ export function Footer() {
             </p>
             <a href={`mailto:${EMAIL}`} className="link-underline mt-8 inline-block font-display text-[clamp(1.3rem,2.4vw,1.9rem)] font-semibold tracking-[-0.03em]">
               {EMAIL}
+            </a>
+            <a href={INSTAGRAM} target="_blank" rel="noreferrer" className="link-underline mt-3 block w-fit text-[15px] text-ivory/70 hover:text-ivory">
+              @blurrycatstudio on Instagram
             </a>
           </div>
           <nav aria-label="Footer" className="md:col-span-2 md:col-start-7">

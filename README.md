@@ -23,6 +23,6 @@ Use `npm start` to judge performance — the dev server serves unbundled modules
 
 ## Placeholders to replace
 
-- Contact email `hello@blurrycatstudio.com` and social links (`src/lib/data.ts`, `src/components/Closing.tsx`)
+- Contact email `hello@blurrycatstudio.com` and the Behance, Dribbble and LinkedIn links (`src/lib/data.ts`, `src/components/Closing.tsx`) — Instagram is live
 - Unsplash stock imagery (`src/lib/images.ts`)
 - Vapi and OpenAI logos use monogram tiles (`src/components/VoiceFlow.tsx`)
