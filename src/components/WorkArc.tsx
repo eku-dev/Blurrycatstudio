@@ -105,7 +105,7 @@ export default function WorkArc() {
         )}
       </AnimatePresence>
 
-      <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 flex flex-col items-center px-5 pb-14 text-center lg:pb-20">
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 flex flex-col items-center px-5 pb-10 text-center lg:pb-12">
         <div className="mb-8">
           <RingText />
         </div>
