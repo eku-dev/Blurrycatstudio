@@ -116,7 +116,7 @@ export default function Nav() {
               ))}
             </ul>
             <div className="mt-auto space-y-6">
-              <Button variant="coral" onClick={() => (setOpen(false), openContact())} icon={<ArrowUpRight size={16} />} className="w-full justify-between">
+              <Button variant="accent" onClick={() => (setOpen(false), openContact())} icon={<ArrowUpRight size={16} />} className="w-full justify-between">
                 Start a project
               </Button>
               <div className="flex justify-between text-sm text-fog">

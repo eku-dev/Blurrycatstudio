@@ -19,7 +19,7 @@ function RingText() {
       <text fill="currentColor" fontSize="12.5" letterSpacing="3.6" fontFamily="Inter" fontWeight="500">
         <textPath href="#ring">{text}</textPath>
       </text>
-      <path d="M92 100 l8 -14 l8 14z" fill="#E5533D" />
+      <path d="M92 100 l8 -14 l8 14z" fill="#FFC330" />
     </svg>
   )
 }
@@ -97,7 +97,7 @@ export default function WorkArc() {
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.9 }}
             transition={{ duration: 0.25 }}
-            className="label pointer-events-none absolute z-20 hidden bg-coral px-3 py-2 text-[10px] text-ink md:block"
+            className="label pointer-events-none absolute z-20 hidden bg-accent px-3 py-2 text-[10px] text-ink md:block"
             style={{ left: pos.x + 18, top: pos.y + 18 }}
           >
             {label} — drag
@@ -110,10 +110,10 @@ export default function WorkArc() {
           <RingText />
         </div>
         <p className="label mb-5 text-fog">
-          <span className="text-coral">(02)</span> Selected work
+          <span className="text-accent">(02)</span> Selected work
         </p>
-        <h2 className="font-display text-[clamp(2.5rem,6.4vw,6.4rem)] font-semibold leading-[0.92] tracking-[-0.055em]">
-          <MaskLines lines={['Good work,', <>built with <span className="serif">intent.</span></>]} />
+        <h2 className="font-display text-[clamp(2.3rem,5.2vw,5.4rem)] font-semibold leading-[0.92] tracking-[-0.055em]">
+          <MaskLines lines={['Turning every story', <>into <span className="serif">unforgettable visuals.</span></>]} />
         </h2>
         <Reveal delay={0.2} className="pointer-events-auto">
           <p className="mx-auto mt-6 max-w-[46ch] text-[16px] leading-relaxed text-ivory/70">

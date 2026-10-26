@@ -13,7 +13,7 @@ export function Logo({ className = '', tone = 'ink' }: { className?: string; ton
       <svg viewBox="0 0 32 32" className="h-7 w-7 shrink-0" aria-hidden>
         <path d="M5 28V10l5.5-6.5L14 10h4l3.5-6.5L27 10v18z" fill={fg} />
         <path d="M9 17q2.6-2.8 5.2 0q-2.6 2.8-5.2 0zM17.8 17q2.6-2.8 5.2 0q-2.6 2.8-5.2 0z" fill={bg} />
-        <rect x="5" y="24.5" width="22" height="3.5" fill="#E5533D" />
+        <rect x="5" y="24.5" width="22" height="3.5" fill="#FFC330" />
       </svg>
       <span className="whitespace-nowrap font-display text-[17px] font-bold tracking-[-0.02em]" style={{ color: fg }}>
         Blurrycat <span className="serif text-[19px] font-normal">Studio</span>
@@ -100,18 +100,18 @@ type BtnProps = {
   children: ReactNode
   onClick?: () => void
   href?: string
-  variant?: 'ink' | 'coral' | 'line' | 'ivory'
+  variant?: 'ink' | 'accent' | 'line' | 'ivory'
   className?: string
   icon?: ReactNode
 }
 
 const variants = {
   ink: 'bg-ink text-ivory hover:text-ink',
-  coral: 'bg-coral text-ink hover:text-ivory',
+  accent: 'bg-accent text-ink hover:text-ivory',
   ivory: 'bg-ivory text-ink hover:text-ink',
   line: 'border border-current text-current hover:text-ivory',
 }
-const fills = { ink: 'bg-coral', coral: 'bg-ink', ivory: 'bg-coral', line: 'bg-ink' }
+const fills = { ink: 'bg-accent', accent: 'bg-ink', ivory: 'bg-accent', line: 'bg-ink' }
 
 /** Rectangular button with a wipe fill on hover. */
 export function Button({ children, onClick, href, variant = 'ink', className = '', icon }: BtnProps) {
@@ -154,7 +154,7 @@ export function Button({ children, onClick, href, variant = 'ink', className = '
 export function SectionLabel({ index, children, tone = 'ink' }: { index: string; children: ReactNode; tone?: 'ink' | 'ivory' }) {
   return (
     <div className={`label flex items-center gap-3 ${tone === 'ink' ? 'text-mute' : 'text-fog'}`}>
-      <span className="text-coral">({index})</span>
+      <span className={tone === 'ink' ? 'text-accent-ink' : 'text-accent'}>({index})</span>
       <span className={`h-px w-8 ${tone === 'ink' ? 'bg-ink/25' : 'bg-ivory/25'}`} />
       <span>{children}</span>
     </div>

@@ -103,7 +103,7 @@ export function Showreel({ open, onClose }: { open: boolean; onClose: () => void
             <div className="mt-auto">
               <AnimatePresence mode="wait">
                 <motion.div key={f.t + i} initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} transition={{ duration: 0.7, ease: EASE }}>
-                  <p className="label text-coral">
+                  <p className="label text-accent">
                     {String(i + 1).padStart(2, '0')} — {f.s}
                   </p>
                   <p className="mt-3 font-display text-[clamp(3rem,10vw,10rem)] font-semibold leading-[0.85] tracking-[-0.06em]">{f.t}</p>
@@ -115,7 +115,7 @@ export function Showreel({ open, onClose }: { open: boolean; onClose: () => void
                   type="button"
                   onClick={() => setPlaying((p) => !p)}
                   aria-label={playing ? 'Pause' : 'Play'}
-                  className="grid h-11 w-11 shrink-0 place-items-center bg-coral text-ink"
+                  className="grid h-11 w-11 shrink-0 place-items-center bg-accent text-ink"
                 >
                   {playing ? <Pause size={16} className="fill-current" /> : <Play size={16} className="fill-current" />}
                 </button>
@@ -179,12 +179,23 @@ function Drawer({ open, onClose, label, children }: { open: boolean; onClose: ()
   )
 }
 
-const TYPES = ['AI Systems', '3D & CGI', 'Voice Agents', 'Digital Design', 'Not sure yet']
-const BUDGETS = ['Under ₹5L', '₹5L – ₹15L', '₹15L – ₹40L', '₹40L +', 'Let’s discuss']
+const TYPES = [
+  'AI Systems',
+  '3D & CGI',
+  'Voice Agents',
+  'Web development',
+  'App development',
+  'Automation',
+  'Social media management',
+  'Product visualization',
+  'Content creation',
+  'Branding',
+  'Ad campaigns',
+  'Not sure yet', // keep last
+]
 
 export function ContactDrawer({ open, onClose }: { open: boolean; onClose: () => void }) {
   const [types, setTypes] = useState<string[]>([])
-  const [budget, setBudget] = useState(BUDGETS[4])
   const [sent, setSent] = useState(false)
 
   useEffect(() => {
@@ -197,9 +208,8 @@ export function ContactDrawer({ open, onClose }: { open: boolean; onClose: () =>
     const body = [
       `Name: ${fd.get('name')}`,
       `Email: ${fd.get('email')}`,
-      `Company: ${fd.get('company') || '—'}`,
+      `Brand: ${fd.get('brand') || '—'}`,
       `Interested in: ${types.join(', ') || '—'}`,
-      `Budget: ${budget}`,
       '',
       String(fd.get('message')),
     ].join('\n')
@@ -220,7 +230,7 @@ export function ContactDrawer({ open, onClose }: { open: boolean; onClose: () =>
           <h2 className="mt-10 font-display text-[clamp(2.2rem,5vw,3.4rem)] font-semibold leading-[0.95] tracking-[-0.05em]">
             Tell us about <span className="serif">your idea.</span>
           </h2>
-          <p className="mt-4 max-w-[44ch] text-[15px] text-ink/70">We reply to every message within two working days.</p>
+          <p className="mt-4 max-w-[44ch] text-[15px] text-ink/70">We reply when the cat stops judging us.</p>
 
           {sent ? (
             <div className="mt-12 border-t border-ink/15 pt-8">
@@ -268,25 +278,9 @@ export function ContactDrawer({ open, onClose }: { open: boolean; onClose: () =>
                 </label>
               </div>
               <label className="block">
-                <span className="label text-mute">Company</span>
-                <input name="company" autoComplete="organization" className={field} placeholder="Optional" />
+                <span className="label text-mute">Brand</span>
+                <input name="brand" autoComplete="organization" className={field} placeholder="Your brand name" />
               </label>
-              <fieldset>
-                <legend className="label mb-4 text-mute">Budget</legend>
-                <div className="flex flex-wrap gap-2">
-                  {BUDGETS.map((b) => (
-                    <button
-                      key={b}
-                      type="button"
-                      aria-pressed={budget === b}
-                      onClick={() => setBudget(b)}
-                      className={`border px-3.5 py-2 text-[14px] transition-colors ${budget === b ? 'border-coral bg-coral text-ink' : 'border-ink/20 hover:border-ink'}`}
-                    >
-                      {b}
-                    </button>
-                  ))}
-                </div>
-              </fieldset>
               <label className="block">
                 <span className="label text-mute">Project details *</span>
                 <textarea required name="message" rows={4} className={`${field} resize-none`} placeholder="What are you making, and by when?" />
@@ -297,7 +291,7 @@ export function ContactDrawer({ open, onClose }: { open: boolean; onClose: () =>
                   type="submit"
                   className="group relative inline-flex h-14 items-center gap-3 overflow-hidden bg-ink px-8 font-display text-[15px] font-semibold text-ivory transition-colors duration-500 hover:text-ink"
                 >
-                  <span className="absolute inset-0 origin-bottom scale-y-0 bg-coral transition-transform duration-500 group-hover:scale-y-100" />
+                  <span className="absolute inset-0 origin-bottom scale-y-0 bg-accent transition-transform duration-500 group-hover:scale-y-100" />
                   <span className="relative">Send enquiry</span>
                   <ArrowUpRight size={16} className="relative" />
                 </button>

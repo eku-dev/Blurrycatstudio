@@ -10,20 +10,20 @@ const Icon = {
       <rect x="6" y="6" width="36" height="36" />
       <circle cx="24" cy="24" r="12" />
       <path d="M6 24h36M24 6v36" opacity=".35" />
-      <circle cx="24" cy="24" r="2.5" fill="#E5533D" stroke="none" />
+      <circle cx="24" cy="24" r="2.5" fill="#FFC330" stroke="none" />
     </svg>
   ),
   real: (
     <svg viewBox="0 0 48 48" className="h-12 w-12" fill="none" stroke="currentColor" strokeWidth="1.2" aria-hidden>
       <path d="M6 42h36M10 42V22l14-12 14 12v20" />
       <path d="M20 42V30h8v12" />
-      <rect x="21" y="16" width="6" height="6" fill="#E5533D" stroke="none" />
+      <rect x="21" y="16" width="6" height="6" fill="#FFC330" stroke="none" />
     </svg>
   ),
   matter: (
     <svg viewBox="0 0 48 48" className="h-12 w-12" fill="none" stroke="currentColor" strokeWidth="1.2" aria-hidden>
       <path d="M24 6l18 36H6z" />
-      <path d="M24 20l7 14H17z" fill="#E5533D" stroke="none" />
+      <path d="M24 20l7 14H17z" fill="#FFC330" stroke="none" />
     </svg>
   ),
 }
@@ -44,7 +44,7 @@ export function Philosophy() {
         </SectionLabel>
         <div className="mt-10 grid gap-10 lg:grid-cols-12">
           <h2 className="font-display text-[clamp(2.5rem,6vw,6rem)] font-semibold leading-[0.92] tracking-[-0.055em] lg:col-span-8">
-            <MaskLines lines={['More than a studio.', <>A <span className="serif text-coral">long-term</span> partner.</>]} />
+            <MaskLines lines={['More than a studio.', <>A <span className="serif text-accent">long-term</span> partner.</>]} />
           </h2>
           <Reveal delay={0.15} className="self-end lg:col-span-4">
             <p className="max-w-[40ch] text-[17px] leading-relaxed text-ivory/75">
@@ -76,7 +76,7 @@ export function Philosophy() {
 const STEPS = [
   { n: '01', t: 'Discover', d: 'Workshops, audits and conversations with the people who will use what we make.', tone: 'paper', meta: ['Stakeholder sessions', 'Audit', 'Opportunity map'] },
   { n: '02', t: 'Direction', d: 'A clear creative and technical direction — the one decision everything else follows.', tone: 'ink', meta: ['Concept routes', 'Moodboards', 'Architecture'] },
-  { n: '03', t: 'Design', d: 'Identity, interface, CGI and conversation design, iterated with you, in the open.', tone: 'coral', meta: ['Prototypes', 'Renders', 'Voice scripts'] },
+  { n: '03', t: 'Design', d: 'Identity, interface, CGI and conversation design, iterated with you, in the open.', tone: 'accent', meta: ['Prototypes', 'Renders', 'Voice scripts'] },
   { n: '04', t: 'Build', d: 'Production-grade code, pipelines and agents — tested against real-world use.', tone: 'charcoal', meta: ['Frontend', 'Automation', 'QA'] },
   { n: '05', t: 'Evolve', d: 'Launch is the midpoint. We measure, refine and keep the work getting better.', tone: 'paper', meta: ['Analytics', 'Iteration', 'Support'] },
 ] as const
@@ -84,7 +84,7 @@ const STEPS = [
 const toneCls = {
   paper: 'bg-paper text-ink',
   ink: 'bg-ink text-ivory border border-ivory/10',
-  coral: 'bg-coral text-ink',
+  accent: 'bg-accent text-ink',
   charcoal: 'bg-[#2e2f2b] text-ivory',
 }
 
@@ -124,7 +124,7 @@ export function Process() {
           <ol className="mt-12 hidden gap-0 lg:flex lg:flex-col" aria-label="Process steps">
             {STEPS.map((s, i) => (
               <li key={s.n} className={`flex items-center gap-4 py-1.5 font-display text-[15px] transition-colors duration-500 ${i === active ? 'text-ivory' : 'text-ivory/35'}`}>
-                <span className={`h-px transition-all duration-500 ${i === active ? 'w-10 bg-coral' : 'w-4 bg-ivory/30'}`} />
+                <span className={`h-px transition-all duration-500 ${i === active ? 'w-10 bg-accent' : 'w-4 bg-ivory/30'}`} />
                 {s.n} {s.t}
               </li>
             ))}

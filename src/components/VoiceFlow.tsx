@@ -207,8 +207,8 @@ export function FlowStatus({ step }: { step: number }) {
   return (
     <span className="label flex min-w-0 items-center gap-2 text-[10px] text-fog">
       <span className="relative flex h-2 w-2 shrink-0">
-        <span className={`absolute inline-flex h-full w-full rounded-full opacity-60 motion-reduce:hidden ${done ? 'bg-sage' : 'animate-ping bg-coral'}`} />
-        <span className={`relative inline-flex h-2 w-2 rounded-full ${done ? 'bg-sage' : 'bg-coral'}`} />
+        <span className={`absolute inline-flex h-full w-full rounded-full opacity-60 motion-reduce:hidden ${done ? 'bg-sage' : 'animate-ping bg-accent'}`} />
+        <span className={`relative inline-flex h-2 w-2 rounded-full ${done ? 'bg-sage' : 'bg-accent'}`} />
       </span>
       <AnimatePresence mode="wait">
         <motion.span key={statusFor(step)} initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -6 }} transition={{ duration: 0.25 }} className="truncate">
@@ -256,7 +256,7 @@ export function VoiceFlow({ step, loop, variant = 'wide', className = '' }: { st
               transition={{ duration: on ? 0.45 : 0.3, ease: 'easeInOut' }}
             />
             {on && (
-              <circle key={`${e.id}-${loop}`} r="3.2" fill="#E5533D">
+              <circle key={`${e.id}-${loop}`} r="3.2" fill="#FFC330">
                 <animateMotion dur="1.4s" repeatCount="indefinite" path={e.d} />
               </circle>
             )}
@@ -272,7 +272,7 @@ export function VoiceFlow({ step, loop, variant = 'wide', className = '' }: { st
           key={s.id}
           d={s.d}
           fill="none"
-          stroke={thinking ? '#E5533D' : '#F5F3EE'}
+          stroke={thinking ? '#FFC330' : '#F5F3EE'}
           strokeDasharray="3 4"
           initial={false}
           animate={{ opacity: step >= SUB_AT[s.id] ? (thinking ? 0.9 : 0.3) : 0, strokeDashoffset: thinking ? [0, -28] : 0 }}
@@ -287,7 +287,7 @@ export function VoiceFlow({ step, loop, variant = 'wide', className = '' }: { st
         const shown = step >= AT[n.id]
         const isActive = active === n.id
         const done = shown && (step >= DONE || (active !== null && AT[n.id] < AT[active]))
-        const stroke = isActive ? '#E5533D' : done ? '#9CA697' : '#F5F3EE'
+        const stroke = isActive ? '#FFC330' : done ? '#9CA697' : '#F5F3EE'
         const strokeOpacity = isActive || done ? 1 : 0.18
         const [ix, iy] = inP(n.id)
         const [ox, oy] = outP(n.id)
@@ -301,7 +301,7 @@ export function VoiceFlow({ step, loop, variant = 'wide', className = '' }: { st
                 height={S + 10}
                 rx={13}
                 fill="none"
-                stroke="#E5533D"
+                stroke="#FFC330"
                 animate={{ opacity: [0.7, 0, 0.7] }}
                 transition={{ duration: thinking && n.accent ? 0.8 : 1.4, repeat: Infinity }}
               />
@@ -315,8 +315,8 @@ export function VoiceFlow({ step, loop, variant = 'wide', className = '' }: { st
                 width={w}
                 height={S}
                 rx={9}
-                fill={n.accent ? '#E5533D' : '#2B2C28'}
-                stroke={n.accent ? (done ? '#9CA697' : '#E5533D') : stroke}
+                fill={n.accent ? '#FFC330' : '#2B2C28'}
+                stroke={n.accent ? (done ? '#9CA697' : '#FFC330') : stroke}
                 strokeOpacity={n.accent ? 1 : strokeOpacity}
                 strokeWidth={isActive || done ? 1.5 : 1}
               />
@@ -391,7 +391,7 @@ export function VoiceFlow({ step, loop, variant = 'wide', className = '' }: { st
         const shown = step >= SUB_AT[s.id]
         return (
           <motion.g key={s.id} initial={false} animate={{ opacity: shown ? 1 : 0, y: shown ? 0 : -14 }} transition={{ type: 'spring', stiffness: 300, damping: 22 }}>
-            <circle cx={cx} cy={cy} r="18" fill="#2B2C28" stroke={thinking ? '#E5533D' : '#F5F3EE'} strokeOpacity={thinking ? 0.9 : 0.18} />
+            <circle cx={cx} cy={cy} r="18" fill="#2B2C28" stroke={thinking ? '#FFC330' : '#F5F3EE'} strokeOpacity={thinking ? 0.9 : 0.18} />
             <Mark b={s.b} x={cx - 9} y={cy - 9} size={18} color="#F5F3EE" />
             <text x={cx} y={cy + 32} textAnchor="middle" fontSize={L.flow === 'v' ? 9.5 : 8.5} fontFamily="Inter" fill="#A9A69E">
               {s.label}
@@ -420,7 +420,7 @@ function Chip({ b }: { b: Brand }) {
         )}
         {b.name}
       </span>
-      <span className="inline-block h-2 w-2 rotate-45 bg-coral" aria-hidden />
+      <span className="inline-block h-2 w-2 rotate-45 bg-accent" aria-hidden />
     </span>
   )
 }

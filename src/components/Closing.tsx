@@ -19,10 +19,10 @@ export function FinalCTA() {
       <div className="shell grid gap-12 lg:grid-cols-12 lg:items-center">
         <div className="lg:col-span-6">
           <p className="label text-mute">
-            <span className="text-coral">(05)</span> Let’s talk
+            <span className="text-accent-ink">(05)</span> Let’s talk
           </p>
           <h2 className="mt-8 font-display text-[clamp(2.6rem,5.2vw,5.6rem)] font-semibold leading-[0.9] tracking-[-0.055em]">
-            <MaskLines lines={['Have a good idea?', <>Let’s give it <span className="serif text-coral">form.</span></>]} />
+            <MaskLines lines={['Have a good idea?', <>Let’s give it <span className="serif bg-[linear-gradient(transparent_58%,var(--color-accent)_58%,var(--color-accent)_92%,transparent_92%)] px-[0.06em]">form.</span></>]} />
           </h2>
           <Reveal delay={0.15}>
             <p className="mt-8 max-w-[42ch] text-[17px] leading-relaxed text-ink/75">
@@ -30,7 +30,7 @@ export function FinalCTA() {
             </p>
             <div className="mt-10 flex flex-wrap items-center gap-6">
               <Magnetic>
-                <Button variant="coral" onClick={openContact} icon={<ArrowUpRight size={16} />} className="h-14 px-8 text-[15px]">
+                <Button variant="accent" onClick={openContact} icon={<ArrowUpRight size={16} />} className="h-14 px-8 text-[15px]">
                   Start a project
                 </Button>
               </Magnetic>
@@ -125,7 +125,7 @@ export function Footer() {
           <span>© {new Date().getFullYear()} Blurrycat Studio. All rights reserved.</span>
           <button type="button" onClick={() => scrollToTarget(0)} className="group inline-flex items-center gap-2 text-ivory/70 hover:text-ivory">
             Back to top
-            <span className="grid h-8 w-8 place-items-center border border-ivory/20 transition-colors group-hover:border-coral group-hover:bg-coral group-hover:text-ink">
+            <span className="grid h-8 w-8 place-items-center border border-ivory/20 transition-colors group-hover:border-accent group-hover:bg-accent group-hover:text-ink">
               <ArrowUp size={14} />
             </span>
           </button>

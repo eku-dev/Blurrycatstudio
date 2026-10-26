@@ -9,8 +9,10 @@
   --color-stone: #D8D3CA;
   --color-mute: #66655F;      /* secondary text on ivory — 5.4:1 */
   --color-fog: #A9A69E;       /* secondary text on ink — 7.6:1 */
-  --color-coral: #E5533D;
-  --color-coral-deep: #C4412C;
+  /* Accent — yellow since Oct 2026. Previous orange: #E5533D (deep #C4412C). */
+  --color-accent: #FFC330;
+  --color-accent-deep: #E0A400;
+  --color-accent-ink: #8A6400;  /* accent for small text on ivory/white — #FFC330 is unreadable there */
   --color-slate: #36566B;
   --color-sage: #9CA697;
 
@@ -36,8 +38,8 @@
     @apply bg-ivory text-ink font-sans antialiased;
     text-rendering: optimizeLegibility;
   }
-  ::selection { background: var(--color-coral); color: var(--color-ink); }
-  :focus-visible { outline: 2px solid var(--color-coral); outline-offset: 3px; }
+  ::selection { background: var(--color-accent); color: var(--color-ink); }
+  :focus-visible { outline: 2px solid var(--color-accent); outline-offset: 3px; }
   img { user-select: none; -webkit-user-drag: none; }
 }
 

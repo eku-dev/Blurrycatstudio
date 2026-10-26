@@ -107,7 +107,7 @@ export default function Hero() {
                 'We make',
                 'complex ideas',
                 <>
-                  feel <span className="serif pr-[0.06em] text-[1.08em] tracking-[-0.02em] text-coral">inevitable.</span>
+                  feel <span className="serif pr-[0.06em] text-[1.08em] tracking-[-0.02em] text-accent">inevitable.</span>
                 </>,
               ]}
             />
@@ -134,7 +134,7 @@ export default function Hero() {
                 onClick={openReel}
                 className="group inline-flex h-12 items-center gap-3 bg-ivory/85 pr-4 font-display text-[14px] font-semibold text-ink"
               >
-                <span className="grid h-12 w-12 place-items-center border border-ink/20 transition-colors duration-500 group-hover:border-coral group-hover:bg-coral">
+                <span className="grid h-12 w-12 place-items-center border border-ink/20 transition-colors duration-500 group-hover:border-accent group-hover:bg-accent">
                   <Play size={14} className="fill-current" />
                 </span>
                 <span className="link-underline">Watch showreel</span>

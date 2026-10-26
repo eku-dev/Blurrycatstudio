@@ -32,4 +32,6 @@ export const IMG = {
   shapes: '1604782206219-3b9576575203',
   sphere: '1653299181802-5d1282fa5eac',
   marble: '1667400104789-f50a4cb393cf',
+  filmCamera: '1587090564077-c7b8f2f1249e',
+  laptop: '1629131726692-1accd0c53ce0',
 } as const

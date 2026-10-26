@@ -42,7 +42,7 @@ function ProjectRow({ p, i }: { p: Project; i: number }) {
           className="group mt-auto inline-flex items-center gap-3 self-start pt-10 font-display text-[15px] font-semibold"
         >
           <span className="link-underline">View project</span>
-          <span className="grid h-10 w-10 place-items-center border border-ink/20 transition-all duration-500 group-hover:rotate-45 group-hover:border-coral group-hover:bg-coral">
+          <span className="grid h-10 w-10 place-items-center border border-ink/20 transition-all duration-500 group-hover:rotate-45 group-hover:border-accent group-hover:bg-accent">
             <ArrowUpRight size={16} />
           </span>
         </button>
