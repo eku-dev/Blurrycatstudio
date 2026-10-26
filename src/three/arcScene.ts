@@ -71,26 +71,16 @@ export function mountArcScene(
   const wheel = new THREE.Group()
   scene.add(wheel)
 
-  // A wide, gentle arc: large radius so the cards stay in the upper band and never
-  // drop down beside the headline. The set repeats to keep the arc full.
-  const R = 14
-  const W = 1.6, H = 2.1
-  const ring = cards.length < 24 ? [...cards, ...cards] : cards
-  const N = ring.length
+  const R = 7.6
+  const W = 1.75, H = 2.3
+  const N = cards.length
   const step = (Math.PI * 2) / N
   const geo = new THREE.PlaneGeometry(W, H, 24, 1)
   const loader = new THREE.TextureLoader()
   loader.setCrossOrigin('anonymous')
 
   const meshes: THREE.Mesh<THREE.PlaneGeometry, THREE.ShaderMaterial>[] = []
-  // one texture per unique image, shared by its repeats
-  const textures = new Map<string, Promise<THREE.Texture>>()
-  const texture = (url: string) => {
-    if (!textures.has(url)) textures.set(url, loader.loadAsync(url))
-    return textures.get(url)!
-  }
-
-  ring.forEach((c, i) => {
+  cards.forEach((c, i) => {
     const mat = new THREE.ShaderMaterial({
       vertexShader: vert,
       fragmentShader: frag,
@@ -105,7 +95,7 @@ export function mountArcScene(
         uImage: { value: new THREE.Vector2(1, 1) },
       },
     })
-    texture(c.url).then((tex) => {
+    loader.load(c.url, (tex) => {
       tex.colorSpace = THREE.SRGBColorSpace
       tex.anisotropy = 4
       const im = tex.image as HTMLImageElement
@@ -127,7 +117,7 @@ export function mountArcScene(
   })
 
   // Wheel centre sits below the fold so only the crown of the arc is visible.
-  const centreY = () => (camera.aspect < 1 ? -10 : -11.15)
+  const centreY = () => (camera.aspect < 1 ? -6.2 : -5.4)
 
   const layout = (rot: number) => {
     const cy = centreY()
@@ -171,7 +161,7 @@ export function mountArcScene(
     if (dragging) {
       const dx = e.clientX - lastX
       lastX = e.clientX
-      velocity = dx * 0.0011
+      velocity = dx * 0.0022
       dragOffset += velocity
     }
   }
@@ -210,9 +200,9 @@ export function mountArcScene(
         velocity *= 0.94
         dragOffset += velocity
       }
-      idle += dt * 0.012
+      idle += dt * 0.025
     }
-    const target = -progress * Math.PI * 0.3 + dragOffset + idle
+    const target = -progress * Math.PI * 0.9 + dragOffset + idle
     rot += (target - rot) * (opts.reduced ? 1 : 0.07)
 
     ray.setFromCamera(ndc, camera)

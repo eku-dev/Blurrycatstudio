@@ -12,7 +12,7 @@ import { Button, MaskLines, Reveal } from './primitives'
 function RingText() {
   const text = 'SELECTED WORK · 2024—2026 · BLURRYCAT STUDIO · '
   return (
-    <svg viewBox="0 0 200 200" className="h-28 w-28 animate-spin-slow text-ivory/70 lg:h-32 lg:w-32" aria-hidden>
+    <svg viewBox="0 0 200 200" className="h-20 w-20 animate-spin-slow text-ivory/70 lg:h-24 lg:w-24" aria-hidden>
       <defs>
         <path id="ring" d="M100,100 m-78,0 a78,78 0 1,1 156,0 a78,78 0 1,1 -156,0" />
       </defs>
@@ -106,20 +106,20 @@ export default function WorkArc() {
       </AnimatePresence>
 
       <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 flex flex-col items-center px-5 pb-10 text-center lg:pb-12">
-        <div className="mb-8">
+        <div className="mb-5">
           <RingText />
         </div>
         <p className="label mb-5 text-fog">
           <span className="text-accent">(02)</span> Selected work
         </p>
-        <h2 className="font-display text-[clamp(2.3rem,5.2vw,5.4rem)] font-semibold leading-[0.92] tracking-[-0.055em]">
+        <h2 className="font-display text-[clamp(1.9rem,3.4vw,3.6rem)] font-semibold leading-[0.92] tracking-[-0.055em]">
           <MaskLines lines={['Turning every story', <>into <span className="serif">unforgettable visuals.</span></>]} />
         </h2>
         <Reveal delay={0.2} className="pointer-events-auto">
-          <p className="mx-auto mt-6 max-w-[46ch] text-[16px] leading-relaxed text-ivory/70">
+          <p className="mx-auto mt-4 max-w-[46ch] text-[15px] leading-relaxed text-ivory/70">
             A selection of projects where design, technology and creativity come together to create real impact.
           </p>
-          <div className="mt-8 flex justify-center">
+          <div className="mt-6 flex justify-center">
             <Button onClick={openContact} variant="ivory" icon={<ArrowUpRight size={16} />}>
               Start a project
             </Button>
