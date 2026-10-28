@@ -6,7 +6,7 @@ import { scrollToTarget } from '../lib/smooth'
 export const EASE = [0.16, 1, 0.3, 1] as const
 
 /**
- * Wordmark logo. TEMPORARY: raster placeholders in /public/brand (tight-cropped, 340×22).
+ * Wordmark logo (PNG, tight-cropped, 581×35 — transparent background).
  * Replace with the designer's SVGs — keep the same filenames and nothing else needs to change.
  *   light  → white "BLURRYCAT" + yellow "STUDIO", for dark backgrounds
  *   dark   → black wordmark, for light backgrounds
@@ -16,8 +16,8 @@ export function Logo({ className = '', tone = 'ink' }: { className?: string; ton
     <img
       src={tone === 'ivory' ? '/brand/logo-light.png' : '/brand/logo-dark.png'}
       alt="Blurrycat Studio"
-      width={340}
-      height={22}
+      width={581}
+      height={35}
       decoding="async"
       className={`block h-[13px] w-auto select-none sm:h-[16px] ${className}`}
     />
