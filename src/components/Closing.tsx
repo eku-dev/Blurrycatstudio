@@ -76,7 +76,7 @@ export function Footer() {
       <div className="shell">
         <div className="grid gap-12 border-b border-ivory/15 pb-16 md:grid-cols-12">
           <div className="md:col-span-5">
-            <Logo tone="ivory" />
+            <Logo tone="ivory" className="sm:!h-[18px]" />
             <p className="mt-6 max-w-[34ch] text-[15px] leading-relaxed text-ivory/65">
               Design, CGI and intelligent systems for brands moving forward.
             </p>

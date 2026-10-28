@@ -5,20 +5,22 @@ import { scrollToTarget } from '../lib/smooth'
 
 export const EASE = [0.16, 1, 0.3, 1] as const
 
+/**
+ * Wordmark logo. TEMPORARY: raster placeholders in /public/brand (tight-cropped, 340×22).
+ * Replace with the designer's SVGs — keep the same filenames and nothing else needs to change.
+ *   light  → white "BLURRYCAT" + yellow "STUDIO", for dark backgrounds
+ *   dark   → black wordmark, for light backgrounds
+ */
 export function Logo({ className = '', tone = 'ink' }: { className?: string; tone?: 'ink' | 'ivory' }) {
-  const fg = tone === 'ink' ? '#171816' : '#F5F3EE'
-  const bg = tone === 'ink' ? '#F5F3EE' : '#171816'
   return (
-    <span className={`inline-flex items-center gap-2.5 ${className}`}>
-      <svg viewBox="0 0 32 32" className="h-7 w-7 shrink-0" aria-hidden>
-        <path d="M5 28V10l5.5-6.5L14 10h4l3.5-6.5L27 10v18z" fill={fg} />
-        <path d="M9 17q2.6-2.8 5.2 0q-2.6 2.8-5.2 0zM17.8 17q2.6-2.8 5.2 0q-2.6 2.8-5.2 0z" fill={bg} />
-        <rect x="5" y="24.5" width="22" height="3.5" fill="#FFC330" />
-      </svg>
-      <span className="whitespace-nowrap font-display text-[17px] font-bold tracking-[-0.02em]" style={{ color: fg }}>
-        Blurrycat <span className="serif text-[19px] font-normal">Studio</span>
-      </span>
-    </span>
+    <img
+      src={tone === 'ivory' ? '/brand/logo-light.png' : '/brand/logo-dark.png'}
+      alt="Blurrycat Studio"
+      width={340}
+      height={22}
+      decoding="async"
+      className={`block h-[13px] w-auto select-none sm:h-[16px] ${className}`}
+    />
   )
 }
 
