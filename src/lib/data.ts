@@ -4,7 +4,6 @@ export const NAV = [
   { label: 'Work', href: '#work' },
   { label: 'Services', href: '#services' },
   { label: 'Studio', href: '#process' },
-  { label: 'Journal', href: '#journal' },
 ]
 
 export const EMAIL = 'hello@blurrycatstudio.com'

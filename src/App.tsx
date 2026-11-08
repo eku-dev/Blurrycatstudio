@@ -1,12 +1,12 @@
 import { MotionConfig } from 'framer-motion'
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { FinalCTA, Footer } from './components/Closing'
+import { Footer } from './components/Closing'  // FinalCTA is hidden — see below
 import Hero from './components/Hero'
 import Nav from './components/Nav'
 import { ContactDrawer, ProjectDrawer, Showreel } from './components/Overlays'
 // import Projects from './components/Projects'
 import Services from './components/Services'
-import { Journal, Process } from './components/Studio'
+import { Process } from './components/Studio'  // Journal is hidden — see below
 import WorkArc from './components/WorkArc'
 import type { Project } from './lib/data'
 import { startSmoothScroll } from './lib/smooth'
@@ -47,12 +47,12 @@ export default function App() {
           <Services />
           <WorkArc />
           <Process />
-          {/* Hidden for now — re-enable when real case studies and studio copy are ready.
+          {/* Hidden for now — re-enable when real case studies, studio copy and journal posts are ready.
           <Projects />
           <Philosophy />
-          */}
           <Journal />
           <FinalCTA />
+          */}
         </main>
         <Footer />
         <Showreel open={reel} onClose={closeReel} />

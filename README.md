@@ -16,7 +16,7 @@ Use `npm start` to judge performance — the dev server serves unbundled modules
 
 ## Structure
 
-- `src/components/` — page sections (Hero, Process, WorkArc, Services, Journal, Closing) and overlays
+- `src/components/` — page sections (Hero, Services, WorkArc, Process, Closing/footer). Journal, the closing CTA, Projects and Philosophy are built but hidden in `src/App.tsx` and overlays
 - `src/fx/motionPhoto.ts` — WebGL motion-blur effect for the hero photograph
 - `src/three/arcScene.ts` — three.js image wheel for "Selected work" (lazy-loaded)
 - `src/lib/` — data, image helpers, smooth scrolling + section snapping
