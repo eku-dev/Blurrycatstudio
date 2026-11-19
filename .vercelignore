@@ -1,0 +1,5 @@
+voices/
+.schoolos-worktree/
+DEMO/
+node_modules/
+.git/
