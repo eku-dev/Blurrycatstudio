@@ -327,8 +327,10 @@ export default function SplashCursor({
       uniform float uGlow;
       uniform float uIntensity;
       void main() {
-        vec3 c = texture2D(uTexture, vUv).rgb;
-        float density = max(c.r, max(c.g, c.b));
+        vec3 raw = texture2D(uTexture, vUv).rgb;
+        float density = clamp(max(raw.r, max(raw.g, raw.b)), 0.0, 1.0);
+        // Pure matte swirling grey fog (zero specular glow or white blowout)
+        vec3 fogCol = vec3(0.42, 0.43, 0.45);
         if (uShading > 0.01) {
           vec3 lc = texture2D(uTexture, vL).rgb;
           vec3 rc = texture2D(uTexture, vR).rgb;
@@ -336,15 +338,14 @@ export default function SplashCursor({
           vec3 bc = texture2D(uTexture, vB).rgb;
           float dx = length(rc) - length(lc);
           float dy = length(tc) - length(bc);
-          vec3 n = normalize(vec3(dx, dy, 0.045));
+          vec3 n = normalize(vec3(dx, dy, 0.08));
           vec3 l = normalize(vec3(-0.35, 0.55, 0.75));
-          float diff = clamp(dot(n, l) * 0.5 + 0.5, 0.35, 1.0);
-          float spec = pow(max(0.0, dot(n, l)), 10.0) * 0.16;
-          c = c * mix(1.0, diff, clamp(uShading, 0.0, 1.0)) + vec3(spec) * density * clamp(uShading, 0.0, 1.0);
+          float diff = clamp(dot(n, l) * 0.35 + 0.65, 0.52, 0.92);
+          fogCol *= mix(1.0, diff, clamp(uShading, 0.0, 1.0));
         }
-        c += c * uGlow * 0.35;
-        float a = clamp(density * 0.72 * uIntensity, 0.0, 0.82);
-        gl_FragColor = vec4(c * a, a);
+        float softFog = smoothstep(0.0, 0.85, density);
+        float a = clamp(softFog * 0.42 * uIntensity, 0.0, 0.48);
+        gl_FragColor = vec4(fogCol * a, a);
       }
       `,
     )
