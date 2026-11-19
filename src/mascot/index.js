@@ -274,7 +274,7 @@ export function mountBilli(userConfig = {}) {
   function leapPoint(u, p0, p1) {
     const dy = p1.y - p0.y;
     const dist = Math.hypot(p1.x - p0.x, dy);
-    const H = clamp(dist * 0.2, 22, 140);
+    const H = dist < 8 ? clamp(U * 1.05, 74, 132) : clamp(dist * 0.2, 22, 140);
     const down = 0.4 * u + 0.6 * u * u;
     const up = 1 - (0.4 * (1 - u) + 0.6 * (1 - u) * (1 - u));
     const w = dy >= 0 ? down : up;
@@ -740,15 +740,28 @@ export function mountBilli(userConfig = {}) {
     }, { passive: true });
   }
   window.addEventListener('pointerdown', (e) => {
-    if (st.alpha < 0.2) return;
+    if (st.alpha < 0.2 || st.mode !== 'rest') return;
+    const hitR = clamp(U * 0.95, 75, 135);
     const dx = e.clientX - st.x;
-    const dy = e.clientY - (st.y - 36);
-    if (dx * dx + dy * dy <= 95 * 95) {
+    const dy = e.clientY - (st.y - U * 0.52);
+    if (dx * dx + dy * dy <= hitR * hitR) {
       st.earT = 0;
       st.blinkT = 0;
       st.sleep = 0;
       st.rest = 0;
-      st.crouch = 0.45;
+      // Trigger a joyful in-place hop & land right back into a sit
+      const spot = { x: st.x, y: st.y };
+      st.leap = {
+        from: st.station,
+        to: st.station,
+        t: -0.095,
+        dur: 0.56,
+        fixedStart: spot,
+        retarget: null,
+      };
+      st.mode = 'leap';
+      st.hist.length = 0;
+      setDocMode(false);
       dirty = true;
       if (typeof cfg.onPet === 'function') cfg.onPet();
     }
