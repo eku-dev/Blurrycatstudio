@@ -488,10 +488,9 @@ export function ActFinale({ onNavigate }: { onNavigate: (r: RouteId) => void }) 
       id="act-finale"
       className="relative z-20 flex min-h-[100svh] flex-col justify-center overflow-hidden bg-[#000000] px-6 py-16 text-[#F2F1EE] sm:px-10 lg:px-14"
     >
-      {/* Interactive RippleDistortion nocturnal botanical backdrop across the footer */}
-      <div className="pointer-events-none absolute inset-0 opacity-55">
+      {/* Pure RippleDistortion overlay across the entire footer (no extra image) */}
+      <div className="pointer-events-none absolute inset-0 z-30">
         <RippleDistortion
-          src="/textures/footer-botanical.jpg"
           brushSize={150}
           strength={0.2}
           swirl={1}

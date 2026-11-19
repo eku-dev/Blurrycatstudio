@@ -3,7 +3,7 @@ import * as THREE from 'three'
 import { reducedMotion } from '../lib/smooth'
 
 export interface RippleDistortionProps {
-  src: string
+  src?: string
   brushSize?: number
   strength?: number
   swirl?: number
@@ -65,16 +65,12 @@ vec2 coverUv(vec2 uv, vec2 res, float imgAspect) {
 }
 
 void main() {
-  if (uHasTex < 0.5) {
-    gl_FragColor = vec4(0.0);
-    return;
-  }
-
   vec2 aspect = vec2(uRes.x / max(uRes.y, 1.0), 1.0);
   vec2 p = vUv * aspect;
 
   vec2 disp = vec2(0.0);
   float totalWave = 0.0;
+  float ringCrest = 0.0;
 
   for (int i = 0; i < ${MAX_RIPPLES}; i++) {
     vec4 rp = uRipples[i];
@@ -94,6 +90,21 @@ void main() {
 
     disp += push * env * uStrength * 0.14;
     totalWave += abs(wave) * env;
+    ringCrest += max(0.0, wave) * env;
+  }
+
+  // Pure overlay ripple mode (no background image — ripples across the entire section)
+  if (uHasTex < 0.5) {
+    float rippleAmt = clamp(totalWave * 0.85, 0.0, 1.0);
+    if (rippleAmt <= 0.002) {
+      gl_FragColor = vec4(0.0);
+      return;
+    }
+    vec3 baseCol = mix(vec3(0.72, 0.74, 0.78), uTint, clamp(uTintAmount * 4.0, 0.0, 1.0));
+    vec3 col = mix(baseCol, uHighlight, clamp(ringCrest * 0.75 + uGlint * 0.3, 0.0, 1.0));
+    float alpha = clamp(rippleAmt * (0.34 + uStrength * 0.9), 0.0, 0.52);
+    gl_FragColor = vec4(col * alpha, alpha);
+    return;
   }
 
   vec2 baseUv = coverUv(vUv, uRes, uImgAspect);
@@ -200,18 +211,20 @@ export default function RippleDistortion({
     scene.add(new THREE.Mesh(geo, mat))
 
     let loadedTex: THREE.Texture | null = null
-    new THREE.TextureLoader().load(src, (tex) => {
-      loadedTex = tex
-      tex.minFilter = THREE.LinearFilter
-      tex.magFilter = THREE.LinearFilter
-      tex.generateMipmaps = false
-      const img = tex.image as HTMLImageElement | undefined
-      if (img && img.naturalWidth && img.naturalHeight) {
-        mat.uniforms.uImgAspect.value = img.naturalWidth / img.naturalHeight
-      }
-      mat.uniforms.uTexture.value = tex
-      mat.uniforms.uHasTex.value = 1
-    })
+    if (src) {
+      new THREE.TextureLoader().load(src, (tex) => {
+        loadedTex = tex
+        tex.minFilter = THREE.LinearFilter
+        tex.magFilter = THREE.LinearFilter
+        tex.generateMipmaps = false
+        const img = tex.image as HTMLImageElement | undefined
+        if (img && img.naturalWidth && img.naturalHeight) {
+          mat.uniforms.uImgAspect.value = img.naturalWidth / img.naturalHeight
+        }
+        mat.uniforms.uTexture.value = tex
+        mat.uniforms.uHasTex.value = 1
+      })
+    }
 
     let nextIdx = 0
     let lastX = -9999
