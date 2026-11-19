@@ -140,7 +140,24 @@ export default function CinemaHUD({
           }`}
         >
           <span>{menuOpen ? 'Close' : 'Menu'}</span>
-          <BrandCrest className="h-[20px] w-[17px]" />
+          {/* Custom BC Crest smoothly transforms into a crisp minus sign when menu is open */}
+          <span className="relative inline-flex h-[20px] w-[18px] items-center justify-center">
+            <BrandCrest
+              className="h-[20px] w-[17px] transition-all duration-500 ease-[var(--ease-expo)]"
+              style={{
+                opacity: menuOpen ? 0 : 1,
+                transform: menuOpen ? 'scaleY(0.15) scaleX(0.85)' : 'scale(1)',
+              }}
+            />
+            <span
+              aria-hidden
+              className="absolute h-[1.5px] w-[15px] bg-current transition-all duration-500 ease-[var(--ease-expo)]"
+              style={{
+                opacity: menuOpen ? 1 : 0,
+                transform: menuOpen ? 'scaleX(1)' : 'scaleX(0.2)',
+              }}
+            />
+          </span>
         </button>
       </header>
 
@@ -182,10 +199,10 @@ export default function CinemaHUD({
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.5, delay: 0.14, ease: EASE }}
-            className="fixed inset-0 z-[55] flex flex-col items-center justify-center px-6 text-center text-[#EAE9E6]"
+            className="fixed inset-0 z-[55] flex flex-col items-center justify-center px-6 py-20 text-center text-[#EAE9E6]"
           >
             <nav aria-label="Main navigation" className="flex flex-col items-center">
-              <ul className="space-y-2 sm:space-y-2.5">
+              <ul className="flex flex-col items-center gap-1.5 sm:gap-2">
                 {MENU_ITEMS.map((item, i) => {
                   const isActive = hoveredItem === item.id
                   const isDimmed = hoveredItem !== null && !isActive
@@ -205,16 +222,16 @@ export default function CinemaHUD({
                         onFocus={() => setHoveredItem(item.id)}
                         onBlur={() => setHoveredItem(null)}
                         onClick={() => goRoute(item.route, item.hash)}
-                        className={`inline-flex flex-wrap items-baseline justify-center font-serif text-[clamp(1.65rem,5.5vw,3.25rem)] font-normal leading-[1.28] tracking-[-0.01em] transition-opacity duration-500 cursor-pointer ${
+                        className={`inline-flex items-baseline justify-center whitespace-nowrap font-serif text-[clamp(1.85rem,3.4vw,3.1rem)] font-normal leading-[1.22] tracking-[-0.01em] transition-opacity duration-500 cursor-pointer ${
                           isDimmed ? 'opacity-30' : 'opacity-100'
                         }`}
                       >
-                        {/* Prefix words expanding smoothly on hover */}
+                        {/* Prefix words expanding smoothly inline on hover (desktop) */}
                         {item.prefix && (
                           <span
-                            className="inline-block overflow-hidden align-baseline italic text-[#EAE9E6]/75 transition-all duration-700 ease-[var(--ease-expo)]"
+                            className="hidden overflow-hidden align-baseline italic text-[#EAE9E6]/75 transition-all duration-700 ease-[var(--ease-expo)] sm:inline-block"
                             style={{
-                              maxWidth: isActive ? '420px' : '0px',
+                              maxWidth: isActive ? '380px' : '0px',
                               opacity: isActive ? 1 : 0,
                               marginRight: isActive ? '0.28em' : '0px',
                               filter: isActive ? 'blur(0px)' : 'blur(6px)',
@@ -228,12 +245,12 @@ export default function CinemaHUD({
                           {item.label}
                         </span>
 
-                        {/* Suffix words expanding smoothly on hover */}
+                        {/* Suffix words expanding smoothly inline on hover (desktop) */}
                         {item.suffix && (
                           <span
-                            className="inline-block overflow-hidden align-baseline italic text-[#EAE9E6]/75 transition-all duration-700 ease-[var(--ease-expo)]"
+                            className="hidden overflow-hidden align-baseline italic text-[#EAE9E6]/75 transition-all duration-700 ease-[var(--ease-expo)] sm:inline-block"
                             style={{
-                              maxWidth: isActive ? '260px' : '0px',
+                              maxWidth: isActive ? '220px' : '0px',
                               opacity: isActive ? 1 : 0,
                               marginLeft: isActive ? '0.28em' : '0px',
                               filter: isActive ? 'blur(0px)' : 'blur(6px)',
@@ -255,7 +272,7 @@ export default function CinemaHUD({
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.5, delay: 0.48, ease: EASE }}
                 onClick={() => goRoute('contact')}
-                className="link-underline mt-14 font-sans text-[13px] font-normal tracking-wide text-[#EAE9E6]/80 transition-colors hover:text-white cursor-pointer"
+                className="link-underline mt-10 font-sans text-[13px] font-normal tracking-wide text-[#EAE9E6]/80 transition-colors hover:text-white sm:mt-12 cursor-pointer"
               >
                 Contact us
               </motion.button>
