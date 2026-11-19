@@ -1,28 +1,14 @@
-# Blurrycat Studio — Homepage
+# FMIC School Calling Agent — Lucknowi Hindi Voice Scripts
 
-Homepage for Blurrycat Studio, an independent creative technology studio (Lucknow, India).
+Regenerated in warm, polite Lucknowi-style Hindi (pure Devanagari for natural neural prosody, zero pitch-warping, and warm vocal EQ mastering via `ffmpeg`) using `hi-IN-SwaraNeural` (female) and `hi-IN-MadhurNeural` (male).
 
-Built with React, Vite, TypeScript, Tailwind CSS v4, Framer Motion, Lenis and three.js.
-
-## Run
-
-```bash
-npm install
-npm run dev     # development server
-npm start       # production build + preview on http://localhost:4173
-```
-
-Use `npm start` to judge performance — the dev server serves unbundled modules.
-
-## Structure
-
-- `src/components/` — page sections (Hero, Services, WorkArc, Process, Closing/footer). Journal, the closing CTA, Projects and Philosophy are built but hidden in `src/App.tsx` and overlays
-- `src/fx/motionPhoto.ts` — WebGL motion-blur effect for the hero photograph
-- `src/three/arcScene.ts` — three.js image wheel for "Selected work" (lazy-loaded)
-- `src/lib/` — data, image helpers, smooth scrolling + section snapping
-
-## Placeholders to replace
-
-- Contact email `hello@blurrycatstudio.com` and the Behance, Dribbble and LinkedIn links (`src/lib/data.ts`, `src/components/Closing.tsx`) — Instagram is live
-- Unsplash stock imagery (`src/lib/images.ts`)
-- Vapi and OpenAI logos use monogram tiles (`src/components/VoiceFlow.tsx`)
+| File | Scenario | Script (Lucknowi Hindi) |
+|---|---|---|
+| `01_student_absent.mp3` | Ward Absent Today | हैलो, नमस्ते जी... मैं एफ एम आई सी स्कूल से बोल रही/रहा हूँ। बस आपको यह इत्तिला देनी थी कि आपका बच्चा आज स्कूल नहीं आया है। अगर घर पर सब ख़ैरियत है और किसी वजह से छुट्टी ली है, तो मेहरबानी करके स्कूल ऑफिस या क्लास टीचर को बता दीजिएगा। बहुत शुक्रिया जी। |
+| `02_fees_due.mp3` | School Fees Due | हैलो, नमस्ते जी... मैं एफ एम आई सी स्कूल के ऑफिस से बात कर रही/रहा हूँ। आपको बड़े अदब से याद दिलाना था कि इस महीने की स्कूल फीस अभी जमा नहीं हुई है। कोशिश कीजिएगा कि आखिरी तारीख से पहले फीस जमा हो जाए, ताकि बेवजह कोई लेट फीस न लगे। कोई दिक़्क़त हो तो ऑफिस में बात कर लीजिएगा। शुक्रिया जी। |
+| `03_ptm_reminder.mp3` | PTM Reminder | हैलो, नमस्ते जी... मैं एफ एम आई सी स्कूल से बोल रही/रहा हूँ। आपको याद दिलाना था कि इस सनीचर को स्कूल में पेरेंट टीचर मीटिंग यानी पी टी एम रखी गई है। बच्चे की पढ़ाई और प्रोग्रेस पर बात करने के लिए आप वक़्त निकाल कर ज़रूर तशरीफ़ लाइएगा। आपका इंतज़ार रहेगा, शुक्रिया जी। |
+| `04_exam_schedule.mp3` | Exam Schedule Alert | हैलो, नमस्ते जी... एफ एम आई सी स्कूल से बोल रही/रहा हूँ। आपको बताना था कि अगले हफ्ते से बच्चों के इम्तिहान शुरू हो रहे हैं। मेहरबानी करके टाइम टेबल और एडमिट कार्ड एक बार देख लीजिएगा, और बच्चे की तैयारी पर थोड़ा ध्यान दे दीजिएगा। कोई बात पूछनी हो तो क्लास टीचर से राब्ता कर लीजिएगा। शुक्रिया जी। |
+| `05_bus_delay.mp3` | School Bus Delay | हैलो, नमस्ते जी... मैं एफ एम आई सी स्कूल के ट्रांसपोर्ट ऑफिस से बोल रही/रहा हूँ। रास्ते में थोड़ा जाम लगा हुआ है, इसलिए आज आपके रूट की स्कूल बस क़रीब बीस मिनट देर से पहुँचेगी। आपको जो ज़हमत हो रही है उसके लिए माफ़ी चाहते हैं, बस स्टॉप पर थोड़ा इंतज़ार कर लीजिएगा। शुक्रिया जी। |
+| `06_health_early_pickup.mp3` | Health / Early Pickup | हैलो, नमस्ते जी... मैं एफ एम आई सी स्कूल से बोल रही/रहा हूँ। घबराने की कोई बात नहीं है, बस आपके बच्चे की तबीयत आज स्कूल में थोड़ी नासाज़ लग रही है। हमने उन्हें मेडिकल रूम में आराम करने के लिए बिठाया है। आपसे गुज़ारिश है कि थोड़ा वक़्त निकाल कर स्कूल आ जाइए और बच्चे को घर ले जाइए। शुक्रिया जी। |
+| `07_documents_pending.mp3` | Pending Documents | हैलो, नमस्ते जी... मैं एफ एम आई सी स्कूल के ऑफिस से बोल रही/रहा हूँ। आपके बच्चे के कुछ ज़रूरी काग़ज़ात अभी ऑफिस में जमा होने बाकी हैं। मेहरबानी करके इस हफ्ते के अंदर वो काग़ज़ात स्कूल में भिजवा दीजिएगा। बहुत-बहुत शुक्रिया जी। |
+| `08_holiday_notice.mp3` | School Holiday Notice | हैलो, नमस्ते जी... एफ एम आई सी स्कूल से बोल रही/रहा हूँ। आपको इत्तिला देनी थी कि कल स्कूल की छुट्टी रहेगी। परसों से स्कूल अपने तय वक़्त पर ही खुलेगा। धन्यवाद जी। |

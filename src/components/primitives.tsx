@@ -1,73 +1,138 @@
-import { motion, useInView, useMotionValue, useSpring, useReducedMotion } from 'framer-motion'
-import type { ReactNode, MouseEvent } from 'react'
-import { useRef } from 'react'
-import { scrollToTarget } from '../lib/smooth'
+import { motion, useMotionValue, useSpring } from 'framer-motion'
+import type { CSSProperties, ReactNode } from 'react'
 
 export const EASE = [0.16, 1, 0.3, 1] as const
 
-/**
- * Wordmark logo (PNG, tight-cropped, 581×35 — transparent background).
- * Replace with the designer's SVGs — keep the same filenames and nothing else needs to change.
- *   light  → white "BLURRYCAT" + yellow "STUDIO", for dark backgrounds
- *   dark   → black wordmark, for light backgrounds
- */
-export function Logo({ className = '', tone = 'ink' }: { className?: string; tone?: 'ink' | 'ivory' }) {
+/** Custom fine-line architectural monogram crest (BC + subtle geometric cat ears) */
+export function BrandCrest({
+  className = 'h-6 w-5',
+  style,
+}: {
+  className?: string
+  style?: CSSProperties
+}) {
   return (
-    <img
-      src={tone === 'ivory' ? '/brand/logo-light.png' : '/brand/logo-dark.png'}
-      alt="Blurrycat Studio"
-      width={581}
-      height={35}
-      decoding="async"
-      className={`block h-[13px] w-auto select-none sm:h-[16px] ${className}`}
-    />
+    <svg
+      viewBox="0 0 24 28"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      className={className}
+      style={style}
+      aria-hidden="true"
+    >
+      {/* Outer architectural shield with subtle geometric cat-ear apexes */}
+      <path
+        d="M3 2.5L7.5 6H16.5L21 2.5V15.5C21 20.8 17.2 24.4 12 26C6.8 24.4 3 20.8 3 15.5V2.5Z"
+        stroke="currentColor"
+        strokeWidth="1.45"
+        strokeLinejoin="round"
+      />
+      {/* Central architectural spine + interlocked B / C monogram */}
+      <path
+        d="M12 6V25.5"
+        stroke="currentColor"
+        strokeWidth="1.2"
+      />
+      <path
+        d="M6.5 11H10.2C11.2 11 12 11.7 12 12.6C12 13.5 11.2 14.2 10.2 14.2H6.5V11ZM6.5 14.2H10.5C11.4 14.2 12 14.9 12 15.8C12 16.7 11.4 17.5 10.5 17.5H6.5V14.2Z"
+        stroke="currentColor"
+        strokeWidth="1.2"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M17.5 12.1C16.8 11.3 15.9 11 14.9 11C13.3 11 12 12.4 12 14.25C12 16.1 13.3 17.5 14.9 17.5C15.9 17.5 16.8 17.1 17.5 16.3"
+        stroke="currentColor"
+        strokeWidth="1.2"
+        strokeLinecap="round"
+      />
+    </svg>
   )
 }
 
-/** Fade + rise when scrolled into view. */
-export function Reveal({
+export function Logo({ tone = 'ink' }: { tone?: 'ivory' | 'ink' }) {
+  return (
+    <span
+      className={`inline-flex items-center gap-3 ${
+        tone === 'ivory' ? 'text-[#F5F5F5]' : 'text-[#161618]'
+      }`}
+    >
+      <BrandCrest className="h-[22px] w-[19px] shrink-0" />
+      <span className="font-serif text-[12px] font-normal uppercase tracking-[0.26em] leading-none">
+        BLURRYCAT STUDIOS AI
+      </span>
+    </span>
+  )
+}
+
+export function Button({
   children,
-  delay = 0,
-  y = 28,
+  onClick,
+  icon,
+  variant = 'ink',
   className = '',
-  as = 'div',
+  type = 'button',
 }: {
   children: ReactNode
-  delay?: number
-  y?: number
+  onClick?: () => void
+  icon?: ReactNode
+  variant?: 'ivory' | 'ink'
   className?: string
-  as?: 'div' | 'li' | 'article' | 'section' | 'p' | 'h2'
+  type?: 'button' | 'submit'
 }) {
-  const M = motion[as] as typeof motion.div
+  const style =
+    variant === 'ink'
+      ? 'bg-[#161618] text-[#F2F2F0] hover:bg-[#2B2C30]'
+      : 'border border-[#161618]/25 bg-transparent text-[#161618] hover:border-[#161618] hover:bg-[#161618] hover:text-[#F2F2F0]'
   return (
-    <M
-      className={className}
-      initial={{ opacity: 0, y }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: '-12% 0px' }}
-      transition={{ duration: 1.1, ease: EASE, delay }}
+    <button
+      type={type}
+      onClick={onClick}
+      className={`inline-flex h-12 items-center gap-2.5 px-6 font-display text-[13px] font-medium tracking-tight transition-colors duration-300 cursor-pointer ${style} ${className}`}
     >
-      {children}
-    </M>
+      <span>{children}</span>
+      {icon}
+    </button>
   )
 }
 
-/** Line-by-line masked headline reveal. Observes the wrapper — the lines themselves start clipped. */
-export function MaskLines({ lines, className = '', delay = 0, inView = true }: { lines: ReactNode[]; className?: string; delay?: number; inView?: boolean }) {
-  const ref = useRef<HTMLSpanElement>(null)
-  const seen = useInView(ref, { once: true, margin: '0px 0px -10% 0px' })
-  const show = !inView || seen
+export function Magnetic({ children }: { children: ReactNode }) {
+  const x = useMotionValue(0)
+  const y = useMotionValue(0)
+  const sx = useSpring(x, { stiffness: 260, damping: 20 })
+  const sy = useSpring(y, { stiffness: 260, damping: 20 })
+
   return (
-    <span ref={ref} className={`block ${className}`}>
-      {lines.map((l, i) => (
-        <span key={i} className="block overflow-hidden pb-[0.08em] -mb-[0.08em]">
+    <motion.div
+      style={{ x: sx, y: sy }}
+      onPointerMove={(e) => {
+        const b = e.currentTarget.getBoundingClientRect()
+        x.set((e.clientX - b.left - b.width / 2) * 0.22)
+        y.set((e.clientY - b.top - b.height / 2) * 0.22)
+      }}
+      onPointerLeave={() => {
+        x.set(0)
+        y.set(0)
+      }}
+      className="inline-block"
+    >
+      {children}
+    </motion.div>
+  )
+}
+
+export function MaskLines({ lines, delay = 0 }: { lines: ReactNode[]; delay?: number }) {
+  return (
+    <span className="block">
+      {lines.map((line, i) => (
+        <span key={i} className="block overflow-hidden pb-[0.06em]">
           <motion.span
             className="block"
             initial={{ y: '110%' }}
-            animate={{ y: show ? '0%' : '110%' }}
-            transition={{ duration: 1.25, ease: EASE, delay: delay + i * 0.09 }}
+            whileInView={{ y: 0 }}
+            viewport={{ once: true, amount: 0.2 }}
+            transition={{ duration: 0.9, ease: EASE, delay: delay + i * 0.08 }}
           >
-            {l}
+            {line}
           </motion.span>
         </span>
       ))}
@@ -75,90 +140,24 @@ export function MaskLines({ lines, className = '', delay = 0, inView = true }: {
   )
 }
 
-/** Button that drifts gently toward the pointer. */
-export function Magnetic({ children, strength = 0.28, className = '' }: { children: ReactNode; strength?: number; className?: string }) {
-  const ref = useRef<HTMLSpanElement>(null)
-  const reduce = useReducedMotion()
-  const x = useSpring(useMotionValue(0), { stiffness: 220, damping: 18, mass: 0.4 })
-  const y = useSpring(useMotionValue(0), { stiffness: 220, damping: 18, mass: 0.4 })
-  const move = (e: MouseEvent) => {
-    if (reduce || !ref.current || !window.matchMedia('(pointer: fine)').matches) return
-    const b = ref.current.getBoundingClientRect()
-    x.set((e.clientX - b.left - b.width / 2) * strength)
-    y.set((e.clientY - b.top - b.height / 2) * strength)
-  }
-  const leave = () => {
-    x.set(0)
-    y.set(0)
-  }
-  return (
-    <motion.span ref={ref} onMouseMove={move} onMouseLeave={leave} style={{ x, y }} className={`inline-block ${className}`}>
-      {children}
-    </motion.span>
-  )
-}
-
-type BtnProps = {
+export function Reveal({
+  children,
+  delay = 0,
+  className = '',
+}: {
   children: ReactNode
-  onClick?: () => void
-  href?: string
-  variant?: 'ink' | 'accent' | 'line' | 'ivory'
+  delay?: number
   className?: string
-  icon?: ReactNode
-}
-
-const variants = {
-  ink: 'bg-ink text-ivory hover:text-ink',
-  accent: 'bg-accent text-ink hover:text-ivory',
-  ivory: 'bg-ivory text-ink hover:text-ink',
-  line: 'border border-current text-current hover:text-ivory',
-}
-const fills = { ink: 'bg-accent', accent: 'bg-ink', ivory: 'bg-accent', line: 'bg-ink' }
-
-/** Rectangular button with a wipe fill on hover. */
-export function Button({ children, onClick, href, variant = 'ink', className = '', icon }: BtnProps) {
-  const cls = `group relative inline-flex h-12 items-center gap-3 overflow-hidden px-6 font-display text-[14px] font-semibold tracking-[-0.005em] transition-colors duration-500 ${variants[variant]} ${className}`
-  const inner = (
-    <>
-      <span
-        aria-hidden
-        className={`absolute inset-0 origin-bottom scale-y-0 transition-transform duration-500 ease-[var(--ease-expo)] group-hover:scale-y-100 ${fills[variant]}`}
-      />
-      <span className="relative">{children}</span>
-      {icon && <span className="relative transition-transform duration-500 group-hover:translate-x-0.5 group-hover:-translate-y-0.5">{icon}</span>}
-    </>
-  )
-  if (href) {
-    const anchor = href.startsWith('#')
-    return (
-      <a
-        href={href}
-        className={cls}
-        onClick={(e) => {
-          if (anchor) {
-            e.preventDefault()
-            scrollToTarget(href)
-          }
-          onClick?.()
-        }}
-      >
-        {inner}
-      </a>
-    )
-  }
+}) {
   return (
-    <button type="button" onClick={onClick} className={cls}>
-      {inner}
-    </button>
-  )
-}
-
-export function SectionLabel({ index, children, tone = 'ink' }: { index: string; children: ReactNode; tone?: 'ink' | 'ivory' }) {
-  return (
-    <div className={`label flex items-center gap-3 ${tone === 'ink' ? 'text-mute' : 'text-fog'}`}>
-      <span className={tone === 'ink' ? 'text-accent-ink' : 'text-accent'}>({index})</span>
-      <span className={`h-px w-8 ${tone === 'ink' ? 'bg-ink/25' : 'bg-ivory/25'}`} />
-      <span>{children}</span>
-    </div>
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.15 }}
+      transition={{ duration: 0.85, ease: EASE, delay }}
+      className={className}
+    >
+      {children}
+    </motion.div>
   )
 }
