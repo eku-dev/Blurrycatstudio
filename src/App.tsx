@@ -12,6 +12,7 @@ import IntroCurtain from './components/IntroCurtain'
 import LaserCursor from './components/LaserCursor'
 import { ContactDrawer, ProjectDrawer, Showreel } from './components/Overlays'
 import { ContactPage, ProjectsPage, type RouteId, StudioPage } from './components/Pages'
+import SplashCursor from './components/SplashCursor'
 import { playClick, playPurr, setSoundEnabled } from './lib/audio'
 import type { Project } from './lib/data'
 import { scrollToTarget, startSmoothScroll } from './lib/smooth'
@@ -108,6 +109,22 @@ export default function App() {
       <UIContext.Provider value={ui}>
         <IntroCurtain />
         <LaserCursor />
+        <SplashCursor
+          rainbow={false}
+          size={1}
+          force={1}
+          swirl={3}
+          trail={1}
+          clickSplash
+          colorSpeed={1}
+          intensity={1}
+          momentum={1}
+          shading={1}
+          glow={0}
+          quality="high"
+          intro
+          contained={false}
+        />
 
         {/* Thick plain grey + hover breathing floral petals + idle random blooms */}
         <WorldCanvas onReady={handleReady} />
