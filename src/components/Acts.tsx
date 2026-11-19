@@ -6,6 +6,7 @@ import { CinematicFocus, FOG_IMAGE_MASK, FOG_SLAB_MASK } from './CinematicFocus'
 import GridDistortion, { GridDistortionText } from './GridDistortion'
 import { type RouteId, STUDIO_WORKS } from './Pages'
 import { BrandCrest, EASE } from './primitives'
+import RippleDistortion from './RippleDistortion'
 import ScrollExpand from './ScrollExpand'
 
 const EMAIL = 'hello@blurrycatstudio.com'
@@ -487,7 +488,31 @@ export function ActFinale({ onNavigate }: { onNavigate: (r: RouteId) => void }) 
       id="act-finale"
       className="relative z-20 flex min-h-[100svh] flex-col justify-center overflow-hidden bg-[#000000] px-6 py-16 text-[#F2F1EE] sm:px-10 lg:px-14"
     >
-      <div className="mx-auto grid w-full max-w-[1440px] grid-cols-1 items-center gap-10 lg:grid-cols-[1fr_minmax(320px,540px)_1fr] lg:gap-8">
+      {/* Interactive RippleDistortion nocturnal botanical backdrop across the footer */}
+      <div className="pointer-events-none absolute inset-0 opacity-55">
+        <RippleDistortion
+          src="/textures/footer-botanical.jpg"
+          brushSize={150}
+          strength={0.2}
+          swirl={1}
+          rings={4}
+          grayscale
+          spread={5}
+          fade={3}
+          spacing={15}
+          dispersion={0}
+          glint={0}
+          tint="#a855f7"
+          tintAmount={0.1}
+          highlightColor="#ffffff"
+          trigger="hover"
+          clickStrength={2}
+          quality="low"
+          enabled
+        />
+      </div>
+
+      <div className="relative z-10 mx-auto grid w-full max-w-[1440px] grid-cols-1 items-center gap-10 lg:grid-cols-[1fr_minmax(320px,540px)_1fr] lg:gap-8">
         {/* Left Side: Studio Name & Direct Info */}
         <div className="order-2 flex flex-col items-center text-center lg:order-1 lg:items-start lg:text-left">
           <div className="flex items-center gap-3.5">
