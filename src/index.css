@@ -2,17 +2,17 @@
 
 /* ───────────────────────── Design tokens ───────────────────────── */
 @theme {
-  --color-ivory: #F5F3EE;
-  --color-paper: #FFFFFF;
-  --color-ink: #171816;
-  --color-charcoal: #242522;
-  --color-stone: #D8D3CA;
-  --color-mute: #66655F;      /* secondary text on ivory — 5.4:1 */
-  --color-fog: #A9A69E;       /* secondary text on ink — 7.6:1 */
-  /* Accent — yellow since Oct 2026. Previous orange: #E5533D (deep #C4412C). */
-  --color-accent: #FFC330;
-  --color-accent-deep: #E0A400;
-  --color-accent-ink: #8A6400;  /* accent for small text on ivory/white — #FFC330 is unreadable there */
+  --color-obsidian: #C9CACD;
+  --color-ivory: #161618;
+  --color-paper: #D5D6D9;
+  --color-ink: #161618;
+  --color-charcoal: #222326;
+  --color-stone: #B4B5B9;
+  --color-mute: #525358;
+  --color-fog: #67686D;
+  --color-accent: #161618;
+  --color-accent-deep: #000000;
+  --color-accent-ink: #161618;
   --color-slate: #36566B;
   --color-sage: #9CA697;
 
@@ -30,15 +30,28 @@
     from { transform: translate3d(0, 0, 0); }
     to   { transform: translate3d(-50%, 0, 0); }
   }
+
+  @keyframes floralDrift {
+    0%   { transform: scale(1.06) translate3d(-0.8%, -0.5%, 0) rotate(-0.4deg); }
+    33%  { transform: scale(1.11) translate3d(1.1%, -1.0%, 0) rotate(0.6deg); }
+    66%  { transform: scale(1.08) translate3d(-0.4%, 1.0%, 0) rotate(-0.25deg); }
+    100% { transform: scale(1.06) translate3d(-0.8%, -0.5%, 0) rotate(-0.4deg); }
+  }
+
+  @keyframes floralCounter {
+    0%   { transform: scale(1.14) translate3d(0.9%, 0.7%, 0) rotate(0.5deg); }
+    50%  { transform: scale(1.07) translate3d(-1.0%, -0.6%, 0) rotate(-0.5deg); }
+    100% { transform: scale(1.14) translate3d(0.9%, 0.7%, 0) rotate(0.5deg); }
+  }
 }
 
 @layer base {
   html { -webkit-text-size-adjust: 100%; }
   body {
-    @apply bg-ivory text-ink font-sans antialiased;
+    @apply bg-[#C9CACD] text-[#161618] font-sans antialiased;
     text-rendering: optimizeLegibility;
   }
-  ::selection { background: var(--color-accent); color: var(--color-ink); }
+  ::selection { background: #161618; color: #F2F2F0; }
   :focus-visible { outline: 2px solid var(--color-accent); outline-offset: 3px; }
   img { user-select: none; -webkit-user-drag: none; }
 }
